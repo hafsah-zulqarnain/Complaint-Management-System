@@ -1,0 +1,3 @@
+Username	Password	Designation
+hafsah		hafsah		teacher
+rijja		rijja		admin
