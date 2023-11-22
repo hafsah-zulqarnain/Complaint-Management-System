@@ -47,6 +47,23 @@ public class AuthenticateUsers {
             {
                 if(designation.equals("teacher"))
                 {
+                    //will make objects and load data from files 
+                    //also show different menus to different users
+                }
+                if(designation.equals("admin"))
+                {
+                    
+                }
+                if(designation.equals("campusDirector"))
+                {
+                    
+                }
+                if(designation.equals("Employee"))
+                {
+                    
+                }
+                if(designation.equals("Manager"))
+                {
                     
                 }
             }
