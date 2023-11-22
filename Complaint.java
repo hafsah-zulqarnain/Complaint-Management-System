@@ -4,6 +4,7 @@ public class Complaint {
     String type; // complaint type - 1) problem 2) requirement of service or equipment
     Teacher t;
     Dept d;
+    
     Complaint()
     {
         cid=0;
