@@ -55,7 +55,7 @@ public class Teacher extends User {
             int id = recentId + 1;
 
             System.out.println("Enter Complaint type: ");
-            System.out.println("Press 1 for a problem ");
+            System.out.println("Press 1 for a problem: ");
             System.out.println("Enter 2 for equipment/service Complaint ");
             String t = scanner.nextLine();
 
@@ -89,7 +89,7 @@ public class Teacher extends User {
     
 private void writeComplaintToFile(int id, String type, String teacher, String dept, String cdes) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("Complaint.txt", true))) {
-            String complaintLine = String.format("%d\t\t\t%s\t\t   %s\t\t %s\t\t   %s", id, type, teacher, dept, cdes);
+            String complaintLine = String.format("%d\t\t%s\t\t%s\t\t%s\t\t%s", id, type, teacher, dept, cdes);
             writer.newLine();
             writer.write(complaintLine);
         } catch (IOException e) {
