@@ -1,8 +1,4 @@
 Username	Password	Designation
 hafsah		hafsah		teacher
 rijja		rijja		admin
-<<<<<<< Updated upstream
-wazzah		wazzah		teacher
-=======
-wazzah      	wazzah      	teacher
->>>>>>> Stashed changes
+taha		taha		teacher
