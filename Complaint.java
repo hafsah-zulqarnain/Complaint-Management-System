@@ -4,14 +4,12 @@ public class Complaint {
     String type; // complaint type - 1) problem 2) requirement of service or equipment
     Teacher t;
     Dept d;
-    State status; // Pointer to State class
 
     Complaint() {
         cid = 0;
         cdes = null;
         type = null;
         t = null;
-        status = null;
     }
 
     Complaint(int id, String des, String ty, Teacher t1) {
