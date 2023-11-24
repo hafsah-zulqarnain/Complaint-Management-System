@@ -41,7 +41,7 @@ public class AuthenticateUsers {
             }
             if (check==false)
             {
-                System.out.println("Authentication unsuccessful for user");
+                System.out.println("Incorrect Username or password");
             }
             if(check==true)
             {
