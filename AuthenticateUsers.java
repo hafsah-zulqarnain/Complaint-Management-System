@@ -40,23 +40,13 @@ public class AuthenticateUsers {
             if (check == false) {
                 System.out.println("Incorrect Username or password");
             }
-<<<<<<< Updated upstream
             if (check == true) {
                 if (designation.equals("teacher")) {
                     // will make objects and load data from files
                     // also show different menus to different users
-=======
-            if(check==true)
-            {
-                if(designation.equals("teacher"))
-                {
-                    //will make objects and load data from files 
-                    //also show different menus to different users
-            
                     Teacher authenticatedTeacher = new Teacher();
                     authenticatedTeacher.loadComplaintsFromFile(username);
                     authenticatedTeacher.displayComplaints();
->>>>>>> Stashed changes
                 }
                 if (designation.equals("admin")) {
 
