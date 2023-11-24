@@ -41,7 +41,7 @@ public class AuthenticateUsers {
             }
             if (check==false)
             {
-                System.out.println("Authentication successful for user");
+                System.out.println("Authentication unsuccessful for user");
             }
             if(check==true)
             {
