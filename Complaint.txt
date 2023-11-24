@@ -1,0 +1,4 @@
+cid         type       Teacher       Dept      cdes   
+1           1          hafsah        IT        Projector not functional
+2           2          hafsah        Accounts  Paycheck not recieved
+3           2          wazzah        Accounts  Paycheck not recieved
