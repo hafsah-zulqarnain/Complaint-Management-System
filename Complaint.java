@@ -24,7 +24,8 @@ public class Complaint {
         cdes = d;
         type = t;
     }
-
+    
+    
     void print() {
         System.out.println("Complaint Id: " + cid);
         System.out.println("Complaint Description: " + cdes);

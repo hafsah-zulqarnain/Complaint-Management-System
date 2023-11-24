@@ -1,2 +1,3 @@
 cid		type		Teacher		Dept		cdes
 1		1		hafsah		IT		1
+2		2		wazzah		IT		No projector
