@@ -1,5 +1,5 @@
 public class User {
-    String username;
+    public String username;
     String password;
 
     User()

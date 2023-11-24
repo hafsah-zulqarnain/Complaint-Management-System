@@ -5,17 +5,16 @@ import java.util.Scanner;
 
 public class AuthenticateUsers {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
         try {
 
             boolean check = false;
-            Scanner scanner = new Scanner(System.in);
             System.out.println("Username: ");
             String checkUsername = scanner.nextLine();
             System.out.println("Password: ");
             String checkPassword = scanner.nextLine();
             String filePath = "Authen.txt";
             BufferedReader reader = new BufferedReader(new FileReader(filePath));
-            scanner.close();
             // Skip the header line
             reader.readLine();
             String username = null;
@@ -26,11 +25,11 @@ public class AuthenticateUsers {
             while ((line = reader.readLine()) != null) {
                 // Split the line into username, password, and designation
                 String[] values = line.split("\t\t");
-
+                
                 username = values[0];
                 password = values[1];
                 designation = values[2];
-
+                
                 if (authenticateUser(username, password, checkUsername, checkPassword)) {
                     System.out.println("Authentication successful for user");
                     check = true;
@@ -45,8 +44,20 @@ public class AuthenticateUsers {
                     // will make objects and load data from files
                     // also show different menus to different users
                     Teacher authenticatedTeacher = new Teacher();
-                    authenticatedTeacher.loadComplaintsFromFile(username);
-                    authenticatedTeacher.displayComplaints();
+                    authenticatedTeacher.username=checkUsername;
+                    System.out.println("Press 1 to view Complaints: ");
+                    System.out.println("Press 2 to file a new complaint: ");
+                    String option=scanner.nextLine();
+                    
+                    if(option.equals("1"))
+                    {
+                        authenticatedTeacher.loadComplaintsFromFile(username);
+                        authenticatedTeacher.displayComplaints();
+                    }
+                    if(option.equals("2"))
+                    {
+                        authenticatedTeacher.enterComplaint();
+                    }
                 }
                 if (designation.equals("admin")) {
 
@@ -64,6 +75,9 @@ public class AuthenticateUsers {
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        finally {
+            scanner.close();
         }
     }
 
