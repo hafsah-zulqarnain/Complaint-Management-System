@@ -2,3 +2,4 @@ Username	Password	Designation
 hafsah		hafsah		teacher
 rijja		rijja		admin
 taha		taha		teacher
+wazzah		wazzah		teacher

@@ -13,7 +13,7 @@ public class AuthenticateUsers {
             String checkUsername = scanner.nextLine();
             System.out.println("Password: ");
             String checkPassword = scanner.nextLine();
-            String filePath = "Users.txt";
+            String filePath = "Authen.txt";
             BufferedReader reader = new BufferedReader(new FileReader(filePath));
             scanner.close();
             // Skip the header line
