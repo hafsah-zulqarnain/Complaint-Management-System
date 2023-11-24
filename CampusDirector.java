@@ -37,7 +37,6 @@ public class CampusDirector extends User {
     }
 
     public static void main(String[] args) {
-        // Provide the path to your complaint file
         viewComplaintSummary();
     }
 }
