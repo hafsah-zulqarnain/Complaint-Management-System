@@ -1,3 +1,5 @@
 cid		type		Teacher		Dept		cdes
-1		1		hafsah		IT		1
-2		2		wazzah		IT		No projector
+1		Problem		hafsah		Accounts		No paycheck recieved
+2		2		wazzah		IT		Projector not working
+3		Service		taha		Admin		No Tea in morning
+4		Equipment		wazzah		IT		Unavailabilty of board markers

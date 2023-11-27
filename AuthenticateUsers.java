@@ -1,12 +1,17 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AuthenticateUsers {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         try {
+            // Loading all the complaints 
+            ArrayList<Complaint> c = new ArrayList<>(); // Initialize the ArrayList
+            FileManager.loadAllComplaintsFromFile(c);
+            
 
             boolean check = false;
             System.out.println("Username: ");
@@ -17,6 +22,8 @@ public class AuthenticateUsers {
             BufferedReader reader = new BufferedReader(new FileReader(filePath));
             // Skip the header line
             reader.readLine();
+           // ...
+
             String username = null;
             String password = null;
             String designation = null;
@@ -51,7 +58,7 @@ public class AuthenticateUsers {
                     
                     if(option.equals("1"))
                     {
-                        authenticatedTeacher.loadComplaintsFromFile(username);
+                        authenticatedTeacher.loadComplaintsFromFile(username,c);
                         authenticatedTeacher.displayComplaints();
                     }
                     if(option.equals("2"))
@@ -88,5 +95,7 @@ public class AuthenticateUsers {
         }
         return false;
     }
-
+    
+    
+   
 }
