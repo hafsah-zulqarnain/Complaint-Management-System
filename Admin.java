@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Admin extends User {
-    static ArrayList<User> AllUsers; 
+    static ArrayList<User> AllUsers;
+
     public Admin() {
         // Load all users into the allUsers ArrayList
         AllUsers = FileManager.loadAllUsersFromFile();
     }
 
     public void addUser() {
-        
+
         try {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Enter the new user details:");
@@ -25,13 +26,11 @@ public class Admin extends User {
             String newPassword = scanner.nextLine();
             System.out.print("Designation: ");
             String newDesignation = scanner.nextLine();
-            if(newDesignation.equals("teacher"))
-            {
-                Teacher t=new Teacher();
+            if (newDesignation.equals("teacher")) {
+                Teacher t = new Teacher();
                 t.setUsername(newUsername);
                 t.setPassword(newPassword);
                 t.setDesignation(newDesignation);
-                
 
                 System.out.print("Name: ");
                 String name = scanner.nextLine();
@@ -40,7 +39,7 @@ public class Admin extends User {
                 String subject = scanner.nextLine();
                 t.setSubject(subject);
                 System.out.print("Enter Relevant Department: ");
-                String d = scanner.nextLine(); //eneter teacher department
+                String d = scanner.nextLine(); // eneter teacher department
                 t.setTdept(d);
                 FileManager.writeTeacherToFile(t, "Teachers.txt");
                 AllUsers.add(t);
@@ -48,14 +47,11 @@ public class Admin extends User {
 
             }
 
-
             // Create a new User object
-           
 
             // Add the new user to the allUsers ArrayList
 
             // Append the new user details to the Authen.txt file
-            
 
             System.out.println("User added successfully.");
         } catch (IOException e) {
@@ -67,7 +63,7 @@ public class Admin extends User {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter the username to remove: ");
         String usernameToRemove = scanner.nextLine();
-    
+
         // Find the user in the allUsers ArrayList
         User userToRemove = null;
         for (User user : AllUsers) {
@@ -76,29 +72,27 @@ public class Admin extends User {
                 break;
             }
         }
-    
+
         if (userToRemove != null) {
             // Remove the user from the allUsers ArrayList
             AllUsers.remove(userToRemove);
-    
+
             // Remove the user from the Authen.txt file
             FileManager.writeUsersToFile(AllUsers, "Authen.txt");
-    
+
             // If the user is a teacher, remove them from the Teachers.txt file
             if (userToRemove instanceof Teacher) {
                 System.out.println("Hello");
                 Teacher teacherToRemove = (Teacher) userToRemove;
                 FileManager.removeTeacherFromFile(teacherToRemove, "Teachers.txt");
             }
-    
+
             System.out.println("User removed successfully.");
         } else {
             System.out.println("User not found.");
         }
     }
-    
-   
-    
+
     public static void displayAllUsers() {
         System.out.println("All Users in the System:");
         System.out.println("Username\tPassword\tDesignation");
@@ -108,9 +102,9 @@ public class Admin extends User {
 
     }
 
-     // Helper method to check if a username already exists
+    // Helper method to check if a username already exists
     private boolean usernameExists(String username) {
         return AllUsers.stream().anyMatch(user -> user.getUsername().equals(username));
     }
-    
+
 }
