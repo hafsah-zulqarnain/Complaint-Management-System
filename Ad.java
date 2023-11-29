@@ -1,3 +1,3 @@
-public class Ad extends User{
+public class Ad extends Dept{
     
 }

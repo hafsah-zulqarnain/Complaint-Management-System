@@ -1,3 +1,3 @@
-public class Closed extends User {
+public class Closed implements State {
     
 }

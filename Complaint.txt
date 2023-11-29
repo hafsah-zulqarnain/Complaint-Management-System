@@ -4,3 +4,4 @@ cid		type		Teacher		Dept		cdes
 3		Service		taha		Admin		No Tea in morning
 4		Equipment		wazzah		IT		Unavailabilty of board markers
 5		Problem		hafsah		IT		Lab instructor frequent absent
+6		problem		hafsah		Admin		no tea

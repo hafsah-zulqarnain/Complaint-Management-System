@@ -1,3 +1,3 @@
-public class New extends User{
+public class New implements State{
     
 }

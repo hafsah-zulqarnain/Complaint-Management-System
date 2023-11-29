@@ -1,3 +1,3 @@
-public class Resolved extends User {
+public class Resolved implements State {
     
 }

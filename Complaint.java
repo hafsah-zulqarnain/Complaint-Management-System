@@ -4,6 +4,7 @@ public class Complaint {
     String type; // complaint type - 1) problem 2) requirement of service or equipment
     Teacher t;
     Dept d;
+    State s;
 
     public Complaint() {
         cid = 0;
@@ -11,6 +12,8 @@ public class Complaint {
         type = null;
         t = null;  // or use a default Teacher object
         d = null;  // or use a default Dept object
+        d = null;  // or use a default Dept object
+        s = null;  // or use a default Dept object
     }
 
     public Complaint(int id, String description, String type, String teacherUsername, String deptName) {
@@ -21,6 +24,7 @@ public class Complaint {
         t.username = teacherUsername;
         d = new Dept();
         d.name = deptName;
+        
     }
 
     public Complaint(int id, String description, String type, Teacher teacher) {

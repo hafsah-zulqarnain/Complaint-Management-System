@@ -1,3 +1,3 @@
-public class Assigned extends User{
+public class Assigned implements State{
     
 }

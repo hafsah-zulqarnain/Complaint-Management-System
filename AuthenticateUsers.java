@@ -67,7 +67,25 @@ public class AuthenticateUsers {
                     }
                 }
                 if (designation.equals("admin")) {
-
+                    Admin a=new Admin();
+                    System.out.println("Press 1 to view all Users: ");
+                    System.out.println("Press 2 to add new employee: ");
+                    System.out.println("Press 3 to delete employee: ");
+              
+                    String option=scanner.nextLine();
+                    if(option.equals("1"))
+                    {
+                        a.displayAllUsers();
+                    }
+                    if(option.equals("2"))
+                    {
+                        a.addUser();
+                    }
+                    if(option.equals("3"))
+                    {
+                       a.removeUser();
+                    }
+                   
                 }
                 if (designation.equals("campusDirector")) {
 
@@ -76,7 +94,8 @@ public class AuthenticateUsers {
 
                 }
                 if (designation.equals("Manager")) {
-
+                    Manager m=new Manager();
+                    m.username=checkUsername;
                 }
             }
             reader.close();

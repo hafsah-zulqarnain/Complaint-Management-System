@@ -3,40 +3,59 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-public class Teacher extends User {
-    int teacherId;
+public class Teacher extends User{
     String subject;
-    String joinDate;
-    Dept d;
+    String tdept;
+    String name;
     ArrayList<Complaint> complaints; // Using ArrayList instead of array
 
     public Teacher() {
-
-        teacherId = 0;
+        name =null;
         subject = null;
-        joinDate = null;
+        tdept=null;
         complaints = new ArrayList<>();
     }
 
-    Teacher(int tid, String s, String jd) {
-        teacherId = tid;
+
+    Teacher(String s ,String de, String n) {
+        name= n;
         subject = s;
-        joinDate = jd;
+        tdept = de;
         complaints = new ArrayList<>();
     }
 
     // Copy constructor
     public Teacher(Teacher t) {
-        this.teacherId = t.teacherId;
+        this.name=t.name;
         this.subject = t.subject;
-        this.joinDate = t.joinDate;
+        this.tdept=t.tdept;
         this.complaints = new ArrayList<>(t.complaints);
     }
 
+   public void setName(String name) {
+       this.name = name;
+   }
+   public void setTdept(String tdept) {
+       this.tdept = tdept;
+   }
+   public void setSubject(String subject) {
+       this.subject = subject;
+   } 
+   public String getName() {
+       return name;
+   }
+   public String getSubject() {
+       return subject;
+   }
+   public String getTdept() {
+       return tdept;
+   }
     // Add complaint
     //setComplaint(int id, String description, String type, String teacherUsername, String deptName
     void addComplaint(int id, String d, String t,String u, String dept) {
@@ -90,7 +109,7 @@ public class Teacher extends User {
 
     public void loadComplaintsFromFile(String username, ArrayList<Complaint> c) {
         for (Complaint complaint : c) {
-            if ((complaint.t.username).equals(username)) {
+            if ((complaint.t.getUsername()).equals(username)) {
                 // Initialize the Dept field in the new Complaint object
                 
                 Complaint newComplaint = new Complaint(complaint);
@@ -104,20 +123,21 @@ public class Teacher extends User {
         if (complaints.isEmpty()) {
             System.out.println("No complaints to display for this teacher.");
         } else {
-            int totalComplaints=0;
+           
             System.out.println("Complaints for Teacher " + username + ":");
             for (Complaint complaint : complaints) {
                 complaint.print();
-                totalComplaints++;
+               
             }
-            System.out.println("Total Complaints: " + totalComplaints);
+            System.out.println("Total Complaints: " + complaints.size());
         }
     }
    
     
     void print() {
-        System.out.println("Teacher id: " + teacherId);
+
         System.out.println("Subject : " + subject);
-        System.out.println("Join date: " + joinDate);
+        System.out.println("Relevant Department : " + tdept);
+        System.out.println("Teacher Name: " + name);
     }
 }
