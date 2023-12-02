@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class FileManager {
@@ -105,15 +106,16 @@ public class FileManager {
          public static void writeUserToFile(User user, String fileName) throws IOException {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
 
-            writer.newLine();
+        
             writer.write(user.getUsername() + "\t\t" + user.getPassword() + "\t\t" + user.getDesignation());
+             writer.newLine();
             writer.close();
         }
         
         public static void writeTeacherToFile(Teacher teacher, String fileName) throws IOException {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
-            writer.newLine();
             writer.write(teacher.getUsername() + "\t\t" + teacher.getName() + "\t\t" + teacher.getSubject() + "\t\t" + teacher.getTdept());
+            writer.newLine();
             writer.close();
         }
       
@@ -166,33 +168,35 @@ public static void writeUsersToFile(ArrayList<User> users, String fileName) {
 
     // Remove a teacher from a file
  
-    // Load teachers from a file
     public static ArrayList<Teacher> loadTeachersFromFile(String fileName) {
         ArrayList<Teacher> teachers = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
+            reader.readLine(); // Skip header line
             while ((line = reader.readLine()) != null) {
-                String[] data = line.split("\t");
+                String[] data = line.split("\t\t"); // Use two tabs as the delimiter
                 System.out.println(data.length);
-                if (data.length == 4) {
+    
+                // Ensure that the array has enough elements before accessing
+                if (data.length >= 4) {
                     Teacher teacher = new Teacher();
                     teacher.setUsername(data[0]);
-                    teacher.setPassword(data[1]);
-                    teacher.setDesignation(data[2]);
+                    teacher.setName(data[1]);
+                    teacher.setSubject(data[2]);
                     teacher.setTdept(data[3]);
                     teachers.add(teacher);
-                    
+                } else {
+                    // Handle the case when there are not enough elements in the array
+                    System.out.println("Invalid data format in line: " + line);
                 }
             }
-            for (Teacher t: teachers)
-            {
-                t.print();
-            }
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
         return teachers;
     }
+    
 
    
 
@@ -225,25 +229,44 @@ public static void writeUsersToFile(ArrayList<User> users, String fileName) {
 }
 
 
-   // Remove a teacher from the Teachers.txt file
-   public static void removeTeacherFromFile(Teacher teacher, String fileName) {
-    ArrayList<Teacher> teachers = loadTeachersFromFile(fileName);
-    teachers.removeIf(t -> t.getUsername().equals(teacher.getUsername()));
+public static void removeTeacherFromFile(String usernameToRemove, String fileName) {
+    ArrayList<Teacher> teachers = new ArrayList<>(loadTeachersFromFile(fileName));
+    for (Teacher t: teachers)
+    {
+        t.print();
+    }
+    Iterator<Teacher> iterator = teachers.iterator();
+    while (iterator.hasNext()) {
+        Teacher t = iterator.next();
+        if (t.getUsername().equals(usernameToRemove)) {
+            
+            iterator.remove();
+            // teacherToRemove = t;
+            break;
+        }
+    }
+    System.out.println("removing");
+
+    // if(teacherToRemove != null)
+    // {
+       // teachers.remove(teacherToRemove);
     writeTeachersToFile(teachers, fileName);
-     // Move the cursor to the end of the file
-     
+    //}
 }
+
 
 // ... existing code ...
 
+private static Object trgetNamee() {
+    return null;
+}
 // Write teachers to a file
 public static void writeTeachersToFile(ArrayList<Teacher> teachers, String fileName) {
     try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
         writer.println("Username\t\tName\t\tSubject\t\tDepartment");
         for (Teacher teacher : teachers) {
-            writer.println(String.format("%s\t%s\t%s\t%s",
-                    teacher.getUsername(), teacher.getPassword(),
-                    teacher.getDesignation(), teacher.getTdept()));
+            writer.println(String.format("%s\t\t%s\t\t%s\t\t%s",
+                    teacher.getUsername(),teacher.getName(),teacher.getSubject(),teacher.getTdept()));
         }
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(fileName, "rw")) {
         randomAccessFile.seek(randomAccessFile.length());

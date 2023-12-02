@@ -85,10 +85,9 @@ public class Admin extends User {
             FileManager.writeUsersToFile(AllUsers, "Authen.txt");
     
             // If the user is a teacher, remove them from the Teachers.txt file
-            if (userToRemove instanceof Teacher) {
+            if (userToRemove.designation.equals("teacher")) {
                 System.out.println("Hello");
-                Teacher teacherToRemove = (Teacher) userToRemove;
-                FileManager.removeTeacherFromFile(teacherToRemove, "Teachers.txt");
+                FileManager.removeTeacherFromFile(usernameToRemove, "Teachers.txt");
             }
     
             System.out.println("User removed successfully.");

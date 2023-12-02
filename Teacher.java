@@ -136,8 +136,9 @@ public class Teacher extends User{
     
     void print() {
 
+        System.out.println("Username: " + username);
+        System.out.println("Teacher Name: " + name);
         System.out.println("Subject : " + subject);
         System.out.println("Relevant Department : " + tdept);
-        System.out.println("Teacher Name: " + name);
     }
 }
