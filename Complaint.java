@@ -23,7 +23,7 @@ public class Complaint {
         t = new Teacher();
         t.username = teacherUsername;
         d = new Dept();
-        d.name = deptName;
+        d.setName(deptName);
         
     }
 
@@ -41,7 +41,7 @@ public class Complaint {
          t = new Teacher();
         t.username = teacherUsername;
         d = new Dept();
-        d.name = deptName;
+        d.setName(deptName);
     }
 
     public Complaint(Complaint other) {
@@ -66,6 +66,6 @@ public class Complaint {
         System.out.println("Complaint Id: " + cid);
         System.out.println("Complaint Description: " + cdes);
         System.out.println("Type: " + type);
-        System.out.println("Department: " + (d != null ? d.name : "null"));
+        System.out.println("Department: " + (d != null ? d.getName() : "null"));
     }
 }

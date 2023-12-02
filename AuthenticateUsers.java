@@ -90,10 +90,11 @@ public class AuthenticateUsers {
                 if (designation.equals("campusDirector")) {
 
                 }
-                if (designation.equals("Employee")) {
-
+                if (designation.equals("employee")) {
+                    Employee emp = new Employee();
+                    emp.username=checkUsername;
                 }
-                if (designation.equals("Manager")) {
+                if (designation.equals("manager")) {
                     Manager m=new Manager();
                     m.username=checkUsername;
                 }

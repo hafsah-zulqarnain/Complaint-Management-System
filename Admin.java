@@ -44,11 +44,62 @@ public class Admin extends User {
                 t.setTdept(d);
                 FileManager.writeTeacherToFile(t, "Teachers.txt");
                 AllUsers.add(t);
-                FileManager.writeUserToFile(t, "Authen.txt");
+                FileManager.writeUserToFile(t, "Authen.txt"); 
+                System.out.println("User added successfully.");
 
             }
 
+            if(newDesignation.equals("employee"))
+            {
+                Employee e=new Employee();
+                e.setUsername(newUsername);
+                e.setPassword(newPassword);
+                e.setDesignation(newDesignation);
+                
 
+                System.out.print("Name: ");
+                String name = scanner.nextLine();
+                e.setName(name);
+                System.out.print("Employee Department: ");
+                String deptName = scanner.nextLine();
+                e.setDepartment(deptName);
+                
+                FileManager.writeEmployeeToFile(e, "Employees.txt");
+                AllUsers.add(e);
+                FileManager.writeUserToFile(e, "Authen.txt");
+                 System.out.println("User added successfully.");
+
+            }
+
+            if(newDesignation.equals("manager"))
+            {
+                Manager m=new Manager();
+                m.setUsername(newUsername);
+                m.setPassword(newPassword);
+                m.setDesignation(newDesignation);
+                
+
+                System.out.print("Name: ");
+                String name = scanner.nextLine();
+                m.setName(name);
+                System.out.print("Department: ");
+                String deptName = scanner.nextLine();
+                m.setDepartment(deptName);
+                
+                ArrayList<Manager> allManagers=new ArrayList<>(FileManager.loadManagersFromFile("Managers.txt"));
+                boolean check=hasManager(allManagers,deptName);
+                if(check == false)
+                {
+                     FileManager.writeManagerToFile(m, "Managers.txt");
+                     FileManager.writeUserToFile(m, "Authen.txt");
+                     AllUsers.add(m);
+                     System.out.println("User added successfully.");
+                }
+                else{
+                    System.out.println("Department already has a manager");
+                }
+
+            }
             // Create a new User object
            
 
@@ -57,7 +108,7 @@ public class Admin extends User {
             // Append the new user details to the Authen.txt file
             
 
-            System.out.println("User added successfully.");
+           
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,9 +137,20 @@ public class Admin extends User {
     
             // If the user is a teacher, remove them from the Teachers.txt file
             if (userToRemove.designation.equals("teacher")) {
-                System.out.println("Hello");
+                
                 FileManager.removeTeacherFromFile(usernameToRemove, "Teachers.txt");
             }
+
+            if (userToRemove.designation.equals("employee")) {
+               
+                FileManager.removeEmployeeFromFile(usernameToRemove, "Employees.txt");
+            }
+
+            if (userToRemove.designation.equals("manager")) {
+               
+                FileManager.removeEmployeeFromFile(usernameToRemove, "Managers.txt");
+            }
+    
     
             System.out.println("User removed successfully.");
         } else {
@@ -112,4 +174,14 @@ public class Admin extends User {
         return AllUsers.stream().anyMatch(user -> user.getUsername().equals(username));
     }
     
+    private boolean hasManager(ArrayList<Manager> managers,String department)
+    {
+        for (Manager manager : managers) {
+            if (manager.getDepartment().equalsIgnoreCase(department)) {
+                return true; // Department already has a manager
+            }
+        }
+        return false; // Department does not have a manager
+
+    }
 }

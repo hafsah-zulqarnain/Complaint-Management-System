@@ -119,6 +119,7 @@ public class FileManager {
             writer.close();
         }
       
+       
 
         // for removing
         public static ArrayList<User> loadUsersFromFile(String fileName) {
@@ -175,7 +176,7 @@ public static void writeUsersToFile(ArrayList<User> users, String fileName) {
             reader.readLine(); // Skip header line
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split("\t\t"); // Use two tabs as the delimiter
-                System.out.println(data.length);
+                //System.out.println(data.length);
     
                 // Ensure that the array has enough elements before accessing
                 if (data.length >= 4) {
@@ -278,6 +279,150 @@ public static void writeTeachersToFile(ArrayList<Teacher> teachers, String fileN
     }
 }
 
-   
+// Writing Employees to file
+ public static void writeEmployeeToFile(Employee emp, String fileName) throws IOException {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
+            writer.write(emp.getUsername() + "\t\t" + emp.getName() + "\t\t" +  emp.getDepartment());
+            writer.newLine();
+            writer.close();
+        }
+
+    // Load all employees
+ public static ArrayList<Employee> loadEmployeesFromFile(String fileName) {
+        ArrayList<Employee> employees = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            reader.readLine(); // Skip header line
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split("\t\t"); // Use two tabs as the delimiter
+                //System.out.println(data.length);
     
+                // Ensure that the array has enough elements before accessing
+                if (data.length >= 3) {
+                    Employee emp = new Employee();
+                    emp.setUsername(data[0]);
+                    emp.setName(data[1]);
+                    emp.setDepartment(data[2]);
+                    
+                    employees.add(emp);
+                } else {
+                    // Handle the case when there are not enough elements in the array
+                    System.out.println("Invalid data format in line: " + line);
+                }
+            }
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return employees;
+    }
+    
+    public static void writeEmployeesToFile(ArrayList<Employee> employees, String fileName) {
+    try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
+        writer.println("Username\t\tName\t\tDepartment");
+        for (Employee e : employees) {
+            writer.println(String.format("%s\t\t%s\t\t%s",
+                    e.getUsername(),e.getName(),e.getDepartment()));
+        }
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(fileName, "rw")) {
+        randomAccessFile.seek(randomAccessFile.length());
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
 }
+
+public static void removeEmployeeFromFile(String usernameToRemove, String fileName) {
+    ArrayList<Employee> employees = new ArrayList<>(loadEmployeesFromFile(fileName));
+    Iterator<Employee> iterator = employees.iterator();
+    while (iterator.hasNext()) {
+        Employee e = iterator.next();
+        if (e.getUsername().equals(usernameToRemove)) {
+            
+            iterator.remove();
+            
+            break;
+        }
+    }
+    
+    writeEmployeesToFile(employees, fileName);
+  
+}
+
+
+    public static ArrayList<Manager> loadManagersFromFile(String fileName) {
+        ArrayList<Manager> m = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            reader.readLine(); // Skip header line
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split("\t\t"); // Use two tabs as the delimiter
+                //System.out.println(data.length);
+    
+                // Ensure that the array has enough elements before accessing
+                if (data.length >= 3) {
+                    Manager manager = new Manager();
+                    manager.setUsername(data[0]);
+                    manager.setName(data[1]);
+                    manager.setDepartment(data[2]);
+                    m.add(manager);
+                } else {
+                    // Handle the case when there are not enough elements in the array
+                    System.out.println("Invalid data format in line: " + line);
+                }
+            }
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return m;
+    }
+    
+// Writing Manager to file
+ public static void writeManagerToFile(Manager manager, String fileName) throws IOException {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
+            writer.write(manager.getUsername() + "\t\t" + manager.getName() + "\t\t" +  manager.getDepartment());
+            writer.newLine();
+            writer.close();
+        }
+
+
+    public static void writeManagersToFile(ArrayList<Manager> managers, String fileName) {
+    try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
+        writer.println("Username\t\tName\t\tDepartment");
+        for (Manager m : managers) {
+            writer.println(String.format("%s\t\t%s\t\t%s",
+                    m.getUsername(),m.getName(),m.getDepartment()));
+        }
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(fileName, "rw")) {
+        randomAccessFile.seek(randomAccessFile.length());
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    }
+
+// Remove a manager
+public static void removeManagerFromFile(String usernameToRemove, String fileName) {
+    ArrayList<Manager> managers = new ArrayList<>(loadManagersFromFile(fileName));
+    Iterator<Manager> iterator = managers.iterator();
+    while (iterator.hasNext()) {
+        Manager m = iterator.next();
+        if (m.getUsername().equals(usernameToRemove)) {
+            
+            iterator.remove();
+            
+            break;
+        }
+    }
+
+    
+    writeManagersToFile(managers, fileName);
+  
+}
+}
+
