@@ -14,36 +14,37 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 public class FileManager {
-     public static void loadAllComplaintsFromFile(ArrayList<Complaint> c) {
-            try {
-                String filePath = "Complaint.txt";
-                BufferedReader reader = new BufferedReader(new FileReader(filePath));
-                // Skip the header line
-                reader.readLine();
-        
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    try (Scanner scanner = new Scanner(line)) {
-                        int cid = scanner.nextInt();
-                        String type = scanner.next();
-                        String teacher = scanner.next();
-                        String dept = scanner.next();
-                        String cdes = scanner.nextLine().trim(); // Read the rest of the line as the description
-                        Complaint newComplaint = new Complaint(cid, cdes, String.valueOf(type), teacher, dept);
-                        c.add(newComplaint);
-                        
-                    } catch (NumberFormatException | IllegalStateException e) {
-                        // Handle parsing errors or missing elements
-                        e.printStackTrace();
-                    }
+    public static void loadAllComplaintsFromFile(ArrayList<Complaint> c) {
+        try {
+            String filePath = "Complaint.txt";
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            // Skip the header line
+            reader.readLine();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                try (Scanner scanner = new Scanner(line)) {
+                    int cid = scanner.nextInt();
+                    String type = scanner.next();
+                    String teacher = scanner.next();
+                    String dept = scanner.next();
+                    String cdes = scanner.nextLine().trim(); // Read the rest of the line as the description
+                    Complaint newComplaint = new Complaint(cid, cdes, String.valueOf(type), teacher, dept);
+                    c.add(newComplaint);
+
+                } catch (NumberFormatException | IllegalStateException e) {
+                    // Handle parsing errors or missing elements
+                    e.printStackTrace();
                 }
-        
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        public static void writeComplaintToFile(int id, String type, String teacher, String dept, String cdes) {
+    }
+
+    public static void writeComplaintToFile(int id, String type, String teacher, String dept, String cdes) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("Complaint.txt", true))) {
             String complaintLine = String.format("%d\t\t%s\t\t%s\t\t%s\t\t%s", id, type, teacher, dept, cdes);
             writer.newLine();
@@ -51,61 +52,53 @@ public class FileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-}
 
- public static int getRecentComplaintId() {
-            try (BufferedReader reader = new BufferedReader(new FileReader("Complaint.txt"))) {
-                String line;
-                reader.readLine(); // Skip header line
-                int recentId = 0;
-                while ((line = reader.readLine()) != null) {
-                    String[] values = line.split("\\s+"); // Split by whitespace
-                    int id = Integer.parseInt(values[0]);
-                    if (id > recentId) {
-                        recentId = id;
-                    }
-                }
-                return recentId;
-            } catch (IOException | NumberFormatException e) {
-                e.printStackTrace();
-                return 0;
-            }
-        }
-        public static ArrayList<User> loadAllUsersFromFile() {
-            ArrayList<User> allUsers = new ArrayList<>();
-            try {
-                String filePath = "Authen.txt";
-                BufferedReader reader = new BufferedReader(new FileReader(filePath));
-    
-                // Skip the header line
-                reader.readLine();
-    
-                // Read and process each subsequent line
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    // Split the line into username, password, and designation
-                    String[] values = line.split("\t\t");
-    
-                    String username = values[0];
-                    String password = values[1];
-                    String designation = values[2];
-    
-                    // Create a User object and add it to the ArrayList
-                    User user = new User(username, password, designation);
-                    allUsers.add(user);
-                }
-    
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-    
-            return allUsers;
-        }
-         public static void writeUserToFile(User user, String fileName) throws IOException {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
+    }
 
+    public static int getRecentComplaintId() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("Complaint.txt"))) {
+            String line;
+            reader.readLine(); // Skip header line
+            int recentId = 0;
+            while ((line = reader.readLine()) != null) {
+                String[] values = line.split("\\s+"); // Split by whitespace
+                int id = Integer.parseInt(values[0]);
+                if (id > recentId) {
+                    recentId = id;
+                }
+            }
+            return recentId;
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public static ArrayList<User> loadAllUsersFromFile() {
+        ArrayList<User> allUsers = new ArrayList<>();
+        try {
+            String filePath = "Authen.txt";
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+
+            // Skip the header line
+            reader.readLine();
+
+            // Read and process each subsequent line
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Split the line into username, password, and designation
+                String[] values = line.split("\t\t");
+
+                String username = values[0];
+                String password = values[1];
+                String designation = values[2];
+
+                // Create a User object and add it to the ArrayList
+                User user = new User(username, password, designation);
+                allUsers.add(user);
+            }
+
+<<<<<<< HEAD
         
             writer.write(user.getUsername() + "\t\t" + user.getPassword() + "\t\t" + user.getDesignation());
              writer.newLine();
@@ -120,9 +113,34 @@ public class FileManager {
         }
       
        
+=======
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+>>>>>>> 06accc44f0807202129fd2360b272dc38247e10a
 
-        // for removing
-        public static ArrayList<User> loadUsersFromFile(String fileName) {
+        return allUsers;
+    }
+
+    public static void writeUserToFile(User user, String fileName) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
+
+        writer.newLine();
+        writer.write(user.getUsername() + "\t\t" + user.getPassword() + "\t\t" + user.getDesignation());
+        writer.close();
+    }
+
+    public static void writeTeacherToFile(Teacher teacher, String fileName) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
+        writer.newLine();
+        writer.write(teacher.getUsername() + "\t\t" + teacher.getName() + "\t\t" + teacher.getSubject() + "\t\t"
+                + teacher.getTdept());
+        writer.close();
+    }
+
+    // for removing
+    public static ArrayList<User> loadUsersFromFile(String fileName) {
         ArrayList<User> users = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
@@ -144,31 +162,36 @@ public class FileManager {
 
     // Write users to a file
     // Write users to a file
-public static void writeUsersToFile(ArrayList<User> users, String fileName) {
-    try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
-        // Write the header line
-        writer.println("Username\tPassword\tDesignation");
+    public static void writeUsersToFile(ArrayList<User> users, String fileName) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
+            // Write the header line
+            writer.println("Username\tPassword\tDesignation");
 
-        // Write user data
-        for (User user : users) {
-            if (user instanceof Teacher) {
-                Teacher teacher = (Teacher) user;
-                writer.println(String.format("%s\t\t%s\t\t%s\t\t%s",
-                        teacher.getUsername(), teacher.getPassword(),
-                        teacher.getDesignation(), teacher.getTdept()));
-            } else {
-                writer.println(String.format("%s\t\t%s\t\t%s",
-                        user.getUsername(), user.getPassword(), user.getDesignation()));
+            // Write user data
+            for (User user : users) {
+                if (user instanceof Teacher) {
+                    Teacher teacher = (Teacher) user;
+                    writer.println(String.format("%s\t\t%s\t\t%s\t\t%s",
+                            teacher.getUsername(), teacher.getPassword(),
+                            teacher.getDesignation(), teacher.getTdept()));
+                } else {
+                    writer.println(String.format("%s\t\t%s\t\t%s",
+                            user.getUsername(), user.getPassword(), user.getDesignation()));
+                }
             }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        
-    } catch (IOException e) {
-        e.printStackTrace();
     }
-}
 
     // Remove a teacher from a file
+<<<<<<< HEAD
  
+=======
+
+    // Load teachers from a file
+>>>>>>> 06accc44f0807202129fd2360b272dc38247e10a
     public static ArrayList<Teacher> loadTeachersFromFile(String fileName) {
         ArrayList<Teacher> teachers = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
@@ -186,12 +209,21 @@ public static void writeUsersToFile(ArrayList<User> users, String fileName) {
                     teacher.setSubject(data[2]);
                     teacher.setTdept(data[3]);
                     teachers.add(teacher);
+<<<<<<< HEAD
                 } else {
                     // Handle the case when there are not enough elements in the array
                     System.out.println("Invalid data format in line: " + line);
                 }
             }
             
+=======
+
+                }
+            }
+            for (Teacher t : teachers) {
+                t.print();
+            }
+>>>>>>> 06accc44f0807202129fd2360b272dc38247e10a
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -199,37 +231,42 @@ public static void writeUsersToFile(ArrayList<User> users, String fileName) {
     }
     
 
-   
+    public static void removeUserFromFile(User user, String fileName) {
+        ArrayList<User> users = loadUsersFromFile(fileName);
 
-   public static void removeUserFromFile(User user, String fileName) {
-    ArrayList<User> users = loadUsersFromFile(fileName);
-    
-    // Find and remove the user
-    users.removeIf(u -> u.getUsername().equals(user.getUsername()));
-    
-    // Write the updated content back to the file
-    try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
-        writer.println("Username\tPassword\tDesignation");
-        
-        for (User u : users) {
-            if (u instanceof Teacher) {
-                Teacher teacher = (Teacher) u;
-                writer.println(String.format("%s\t\t%s\t\t%s\t\t%s",
-                        teacher.getUsername(), teacher.getPassword(),
-                        teacher.getDesignation(), teacher.getTdept()));
-            } else {
-                writer.println(String.format("%s\t\t%s\t\t%s",
-                        u.getUsername(), u.getPassword(), u.getDesignation()));
+        // Find and remove the user
+        users.removeIf(u -> u.getUsername().equals(user.getUsername()));
+
+        // Write the updated content back to the file
+        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
+            writer.println("Username\tPassword\tDesignation");
+
+            for (User u : users) {
+                if (u instanceof Teacher) {
+                    Teacher teacher = (Teacher) u;
+                    writer.println(String.format("%s\t\t%s\t\t%s\t\t%s",
+                            teacher.getUsername(), teacher.getPassword(),
+                            teacher.getDesignation(), teacher.getTdept()));
+                } else {
+                    writer.println(String.format("%s\t\t%s\t\t%s",
+                            u.getUsername(), u.getPassword(), u.getDesignation()));
+                }
+
             }
 
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        
-    } catch (IOException e) {
-        e.printStackTrace();
     }
-}
 
+    // Remove a teacher from the Teachers.txt file
+    public static void removeTeacherFromFile(Teacher teacher, String fileName) {
+        ArrayList<Teacher> teachers = loadTeachersFromFile(fileName);
+        teachers.removeIf(t -> t.getUsername().equals(teacher.getUsername()));
+        writeTeachersToFile(teachers, fileName);
+        // Move the cursor to the end of the file
 
+<<<<<<< HEAD
 public static void removeTeacherFromFile(String usernameToRemove, String fileName) {
     ArrayList<Teacher> teachers = new ArrayList<>(loadTeachersFromFile(fileName));
     for (Teacher t: teachers)
@@ -268,17 +305,28 @@ public static void writeTeachersToFile(ArrayList<Teacher> teachers, String fileN
         for (Teacher teacher : teachers) {
             writer.println(String.format("%s\t\t%s\t\t%s\t\t%s",
                     teacher.getUsername(),teacher.getName(),teacher.getSubject(),teacher.getTdept()));
-        }
-        try (RandomAccessFile randomAccessFile = new RandomAccessFile(fileName, "rw")) {
-        randomAccessFile.seek(randomAccessFile.length());
-    } catch (IOException e) {
-        e.printStackTrace();
+=======
     }
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}
 
+    // ... existing code ...
+
+    // Write teachers to a file
+    // Write teachers to a file
+    public static void writeTeachersToFile(ArrayList<Teacher> teachers, String fileName) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
+            writer.println("Username\t\tName\t\tSubject\t\tDepartment");
+            for (Teacher teacher : teachers) {
+                writer.println(String.format("%s\t%s\t%s\t%s",
+                        teacher.getUsername(), teacher.getPassword(),
+                        teacher.getDesignation(), teacher.getTdept()));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+>>>>>>> 06accc44f0807202129fd2360b272dc38247e10a
+        }
+    }
+
+<<<<<<< HEAD
 // Writing Employees to file
  public static void writeEmployeeToFile(Employee emp, String fileName) throws IOException {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
@@ -332,6 +380,8 @@ public static void writeTeachersToFile(ArrayList<Teacher> teachers, String fileN
     } catch (IOException e) {
         e.printStackTrace();
     }
+=======
+>>>>>>> 06accc44f0807202129fd2360b272dc38247e10a
 }
 
 public static void removeEmployeeFromFile(String usernameToRemove, String fileName) {

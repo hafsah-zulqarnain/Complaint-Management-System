@@ -1,3 +1,2 @@
 Username	Password	Designation
 rijja		rijja		admin
-hafsah		hafsah		manager
