@@ -54,11 +54,29 @@ public class Manager extends User {
         //DisplayDeptComplaints();
     }
 
+    public void loadManagerEmployees() {
+        // Load manager info from Managers.txt
+       // FileManager.loadManagerInfoFromFile(this);
+
+        // Assuming the manager's department is already set in the Manager object
+        //System.out.println("Dept: "+ department.getName());
+        department.setEmployees(FileManager.loadManagerEmployeesFromFile(department));
+        //DisplayDeptComplaints();
+    }
+
     public void DisplayDeptComplaints()
     {
         for ( Complaint c : department.getComplaints())
         {
             c.print();
+        }
+    }
+
+    public void DisplayDeptEmployees()
+    {
+        for (Employee e : department.getEmployees())
+        {
+            e.displayEmployeeInfo();
         }
     }
     public void print(){

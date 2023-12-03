@@ -19,6 +19,13 @@ public class Employee extends User {
         this.name = name;
         this.department = department;
     }
+    public Employee(String user,String name, String d) {
+    
+        this.username=user;
+        this.name = name;
+        this.department=new Dept();
+        this.department.setName(d);
+    }
 
     // Getter and Setter methods
     public String getName() {
@@ -40,11 +47,14 @@ public class Employee extends User {
         this.department.setName(deptname);
     }
 
+    public void loadEmployeeInfo() {
+        FileManager.loadEmployeeInfoFromFile(this);
+    }
     // Other methods as needed
     // For example, you might want to add a method to display employee information
 
     public void displayEmployeeInfo() {
-        System.out.println("Employee Information:");
+       
         System.out.println("Username: " + getUsername());
         System.out.println("Name: " + name);
         System.out.println("Department: " + department.getName()); // Assuming Dept has a getName() method

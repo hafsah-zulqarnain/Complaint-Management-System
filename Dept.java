@@ -60,6 +60,9 @@ public class Dept {
         return employees;
     }
 
+     public void setEmployees(ArrayList<Employee> employees) {
+        this.employees = employees;
+    }
     // Methods to add and retrieve complaints
 
     public void addComplaint(Complaint complaint) {

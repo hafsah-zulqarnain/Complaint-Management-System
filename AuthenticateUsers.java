@@ -52,6 +52,7 @@ public class AuthenticateUsers {
                     // also show different menus to different users
                     Teacher authenticatedTeacher = new Teacher();
                     authenticatedTeacher.setUsername(checkUsername);
+                    //authenticatedTeacher.setPassword(checkPassword);
                     
                     System.out.println("Press 1 to view Complaints: ");
                     System.out.println("Press 2 to file a new complaint: ");
@@ -99,14 +100,25 @@ public class AuthenticateUsers {
                 }
                 if (designation.equals("employee")) {
                     Employee emp = new Employee();
-                    emp.username=checkUsername;
+                    emp.setUsername(checkUsername);
+                    //emp.setPassword(checkPassword);
+                    System.out.println("Press 1 to view your profile: ");
+                    String option=scanner.nextLine();
+                    if(option.equals("1"))
+                    {
+                        emp.loadEmployeeInfo();
+                        emp.displayEmployeeInfo();
+                    }
+
                 }
                 if (designation.equals("manager")) {
                     Manager m=new Manager();
                     m.setUsername(checkUsername);
+                   // m.setPassword(checkPassword);
                     m.loadManagerInfo();
                     System.out.println("Press 1 to view complaints from your department: ");
                     System.out.println("Press 2 to view your profile: ");
+                    System.out.println("Press 3 to view employees in your department: ");
                     String option=scanner.nextLine();
                     if(option.equals("1"))
                     {
@@ -118,8 +130,13 @@ public class AuthenticateUsers {
                     {
                          m.print();
                     }
+                    if(option.equals("3"))
+                    {
+                         m.loadManagerEmployees();
+                         m.DisplayDeptEmployees();
+                    }
                     
-                    //m.DisplayDeptComplaints();
+                   
                 }
             }
             reader.close();

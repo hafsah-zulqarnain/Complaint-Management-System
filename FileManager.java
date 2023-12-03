@@ -501,6 +501,26 @@ public static void loadManagerInfoFromFile(Manager manager) {
         e.printStackTrace();
     }
 }
+public static void loadEmployeeInfoFromFile(Employee employee) {
+    try (BufferedReader reader = new BufferedReader(new FileReader("Employees.txt"))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] values = line.split("\t\t"); // Assuming values are separated by tabs
+
+            // Assuming the username is in the first column of the file
+            String fileUsername = values[0];
+
+            if (fileUsername.equals(employee.getUsername())) {
+                // Assuming the structure of the file is: Username Name Department
+                employee.setName(values[1]);
+                employee.setDepartment(values[2]);
+                break; // Stop reading after finding the matching username
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
 
 public static ArrayList<Complaint> loadManagerComplaintsFromFile(Dept department) {
     ArrayList<Complaint> managerComplaints = new ArrayList<>();
@@ -528,12 +548,12 @@ public static ArrayList<Complaint> loadManagerComplaintsFromFile(Dept department
                 String dept = scanner.next();
                 String des = scanner.nextLine().trim(); // Read the rest of the line as the description
 
-                System.out.println(dept);
+                //System.out.println(dept);
                 // Check if the complaint belongs to the manager's department
                 if (dept.equalsIgnoreCase(department.getName())) {
                     Complaint newComplaint = new Complaint(cid, des, type, teacher, dept);
 
-                    System.out.println("Hello");
+                    //System.out.println("Hello");
                     switch (s.toLowerCase()) {
                         case "new":
                             newComplaint.setState(new New());
@@ -566,6 +586,52 @@ public static ArrayList<Complaint> loadManagerComplaintsFromFile(Dept department
     }
 
     return managerComplaints;
+}
+
+public static ArrayList<Employee> loadManagerEmployeesFromFile(Dept department) {
+    ArrayList<Employee> managerEmployees = new ArrayList<>();
+
+    try {
+        String filePath = "Employees.txt";
+        File file = new File(filePath);
+        
+        if (!file.exists()) {
+            System.out.println("File not found: " + filePath);
+            return managerEmployees; // Return an empty list if the file is not found
+        }
+        
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        // Skip the header line
+        reader.readLine();
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            try (Scanner scanner = new Scanner(line)) {
+                String username = scanner.next();
+                String name = scanner.next();
+                String dept = scanner.next();
+                
+
+                //System.out.println(dept);
+                // Check if the complaint belongs to the manager's department
+                if (dept.equalsIgnoreCase(department.getName())) {
+                    Employee e = new Employee(username,name,dept);
+
+
+                    managerEmployees.add(e);
+                }
+            } catch (NumberFormatException | IllegalStateException e) {
+                // Handle parsing errors or missing elements
+                e.printStackTrace();
+            }
+        }
+
+        reader.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    return managerEmployees;
 }
 
 
