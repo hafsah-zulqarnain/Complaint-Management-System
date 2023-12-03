@@ -48,7 +48,7 @@ public class Admin extends User {
 
             }
 
-<<<<<<< HEAD
+
             if(newDesignation.equals("employee"))
             {
                 Employee e=new Employee();
@@ -100,8 +100,7 @@ public class Admin extends User {
                 }
 
             }
-=======
->>>>>>> 06accc44f0807202129fd2360b272dc38247e10a
+
             // Create a new User object
 
             // Add the new user to the allUsers ArrayList
@@ -141,7 +140,6 @@ public class Admin extends User {
                 FileManager.removeTeacherFromFile(usernameToRemove, "Teachers.txt");
             }
 
-<<<<<<< HEAD
             if (userToRemove.designation.equals("employee")) {
                
                 FileManager.removeEmployeeFromFile(usernameToRemove, "Employees.txt");
@@ -153,8 +151,7 @@ public class Admin extends User {
             }
     
     
-=======
->>>>>>> 06accc44f0807202129fd2360b272dc38247e10a
+
             System.out.println("User removed successfully.");
         } else {
             System.out.println("User not found.");
@@ -174,7 +171,7 @@ public class Admin extends User {
     private boolean usernameExists(String username) {
         return AllUsers.stream().anyMatch(user -> user.getUsername().equals(username));
     }
-<<<<<<< HEAD
+
     
     private boolean hasManager(ArrayList<Manager> managers,String department)
     {
@@ -186,7 +183,5 @@ public class Admin extends User {
         return false; // Department does not have a manager
 
     }
-=======
 
->>>>>>> 06accc44f0807202129fd2360b272dc38247e10a
 }

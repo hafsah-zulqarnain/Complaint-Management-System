@@ -1,2 +1,4 @@
 Username	Password	Designation
 rijja		rijja		admin
+hafsah		hafsah		teacher
+wazzah		wazzah		manager

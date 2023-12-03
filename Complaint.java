@@ -24,6 +24,7 @@ public class Complaint {
         t.username = teacherUsername;
         d = new Dept();
         d.setName(deptName);
+        s= new New();
         
     }
 
@@ -42,6 +43,7 @@ public class Complaint {
         t.username = teacherUsername;
         d = new Dept();
         d.setName(deptName);
+        s=new New();
     }
 
     public Complaint(Complaint other) {
@@ -60,8 +62,26 @@ public class Complaint {
         } else {
             this.d = null;
         }
+
+        this.s= other.s;
     }
 
+    public void setState(State state) {
+        this.s = state;
+    }
+
+    public void process() {
+        s.process(this);
+    }
+
+    public String getDepartment() {
+        if (this.d != null) {
+            return this.d.getName();
+        } else {
+            System.out.println("Department not set for this complaint.");
+            return null;
+        }
+    }
     public void print() {
         System.out.println("Complaint Id: " + cid);
         System.out.println("Complaint Description: " + cdes);

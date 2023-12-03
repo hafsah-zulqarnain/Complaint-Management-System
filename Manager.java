@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Manager extends User {
     private String name;
     Dept department;
@@ -30,9 +32,38 @@ public class Manager extends User {
         this.department.setName(department);
     }
 
-    void print(){
+    public void loadManagerInfo() {
+        FileManager.loadManagerInfoFromFile(this);
+    }
+
+     public void setComplaints(ArrayList<Complaint> complaints) {
+        this.department.setComplaints(complaints);
+    }
+
+    public ArrayList<Complaint> getComplaints() {
+        return this.department.getComplaints();
+    }
+
+    public void loadManagerComplaints() {
+        // Load manager info from Managers.txt
+       // FileManager.loadManagerInfoFromFile(this);
+
+        // Assuming the manager's department is already set in the Manager object
+        //System.out.println("Dept: "+ department.getName());
+        department.setComplaints(FileManager.loadManagerComplaintsFromFile(department));
+        //DisplayDeptComplaints();
+    }
+
+    public void DisplayDeptComplaints()
+    {
+        for ( Complaint c : department.getComplaints())
+        {
+            c.print();
+        }
+    }
+    public void print(){
         System.out.println("Username: "+ getUsername());
         System.out.println("Name: "+ getName());
-        System.out.println("Username: "+ getDepartment());
+        System.out.println("Department: "+ getDepartment());
     }
 }

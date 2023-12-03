@@ -10,7 +10,7 @@ public class AuthenticateUsers {
         try {
             // Loading all the complaints 
             ArrayList<Complaint> c = new ArrayList<>(); // Initialize the ArrayList
-            FileManager.loadAllComplaintsFromFile(c);
+            //FileManager.loadAllComplaintsFromFile(c);
             
 
             boolean check = false;
@@ -51,9 +51,11 @@ public class AuthenticateUsers {
                     // will make objects and load data from files
                     // also show different menus to different users
                     Teacher authenticatedTeacher = new Teacher();
-                    authenticatedTeacher.username=checkUsername;
+                    authenticatedTeacher.setUsername(checkUsername);
+                    
                     System.out.println("Press 1 to view Complaints: ");
                     System.out.println("Press 2 to file a new complaint: ");
+                    System.out.println("Press 3 to view your profile: ");
                     String option=scanner.nextLine();
                     
                     if(option.equals("1"))
@@ -64,6 +66,11 @@ public class AuthenticateUsers {
                     if(option.equals("2"))
                     {
                         authenticatedTeacher.enterComplaint();
+                    }
+                    if(option.equals("3"))
+                    {
+                        authenticatedTeacher.loadTeacherInfo();
+                        authenticatedTeacher.print();
                     }
                 }
                 if (designation.equals("admin")) {
@@ -96,7 +103,23 @@ public class AuthenticateUsers {
                 }
                 if (designation.equals("manager")) {
                     Manager m=new Manager();
-                    m.username=checkUsername;
+                    m.setUsername(checkUsername);
+                    m.loadManagerInfo();
+                    System.out.println("Press 1 to view complaints from your department: ");
+                    System.out.println("Press 2 to view your profile: ");
+                    String option=scanner.nextLine();
+                    if(option.equals("1"))
+                    {
+                      m.loadManagerComplaints();
+                      m.DisplayDeptComplaints();
+                    }
+                    
+                    if(option.equals("2"))
+                    {
+                         m.print();
+                    }
+                    
+                    //m.DisplayDeptComplaints();
                 }
             }
             reader.close();

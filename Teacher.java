@@ -72,7 +72,7 @@ public class Teacher extends User{
         try {
             // Read the recent complaint ID from the file
             int recentId = FileManager.getRecentComplaintId();
-            int id = recentId + 1;
+            int id = recentId;
 
             System.out.println("Enter Complaint type: ");
             System.out.println("Problem or equipment/service");
@@ -90,14 +90,14 @@ public class Teacher extends User{
             System.out.println("Accounts");
             System.out.println("Admin");
             String dept = scanner.nextLine();
-
+            String state="new";
             // Print and add complaint to the ArrayList
             newComplaint.setComplaint(id, cdes, t,this.username,dept);
             //newComplaint.print();
             complaints.add(newComplaint);
 
             // Write complaint to file
-            FileManager.writeComplaintToFile(id, t, teacher, dept, cdes);
+            FileManager.writeComplaintToFile(id,state ,t, teacher, dept, cdes);
         } catch (Exception e) {
             System.out.println("Error reading input. Please make sure to provide valid input.");
         } finally {
@@ -133,8 +133,11 @@ public class Teacher extends User{
         }
     }
    
+    public void loadTeacherInfo() {
+        FileManager.loadTeacherInfoFromFile(this);
+    }
     
-    void print() {
+    public void print() {
 
         System.out.println("Username: " + username);
         System.out.println("Teacher Name: " + name);

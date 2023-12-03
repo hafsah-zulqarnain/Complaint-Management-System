@@ -74,4 +74,17 @@ public class Dept {
             return null;
         }
     }
+
+    public void loadManagerComplaints(Manager manager) {
+        ArrayList<Complaint> managerComplaints = new ArrayList<>();
+
+        for (Complaint complaint : complaints) {
+            // Check if the complaint belongs to the manager's department
+            if (complaint.getDepartment().equalsIgnoreCase(this.name)) {
+                managerComplaints.add(complaint);
+            }
+        }
+
+        manager.setComplaints(managerComplaints);
+    }
 }

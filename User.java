@@ -35,7 +35,7 @@ public class User implements Serializable{
     {
         password=p;
     }
-    void setUsername(String u)
+    public void setUsername(String u)
     {
         username=u;
     }
