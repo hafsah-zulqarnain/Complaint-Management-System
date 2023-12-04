@@ -9,10 +9,8 @@ public class AuthenticateUsers {
         Scanner scanner = new Scanner(System.in);
         try {
             // Loading all the complaints 
-            ArrayList<Complaint> c = new ArrayList<>(); // Initialize the ArrayList
-            //FileManager.loadAllComplaintsFromFile(c);
             
-
+            
             boolean check = false;
             System.out.println("Username: ");
             String checkUsername = scanner.nextLine();
@@ -22,8 +20,8 @@ public class AuthenticateUsers {
             BufferedReader reader = new BufferedReader(new FileReader(filePath));
             // Skip the header line
             reader.readLine();
-           // ...
-
+            // ...
+            
             String username = null;
             String password = null;
             String designation = null;
@@ -61,7 +59,8 @@ public class AuthenticateUsers {
                     
                     if(option.equals("1"))
                     {
-                        authenticatedTeacher.loadComplaintsFromFile(username,c);
+                        
+                        authenticatedTeacher.loadComplaintsFromFile(username);
                         authenticatedTeacher.displayComplaints();
                     }
                     if(option.equals("2"))

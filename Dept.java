@@ -10,6 +10,7 @@ public class Dept {
     public Dept() {
         // Default constructor
         complaints = new ArrayList<>();
+        this.employees = new ArrayList<>();
     }
 
     public Dept(String name) {

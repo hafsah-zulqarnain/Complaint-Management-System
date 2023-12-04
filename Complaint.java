@@ -83,6 +83,7 @@ public class Complaint {
             this.d = null;
         }
 
+        this.s=new New();
         this.s= other.s;
     }
 
@@ -105,6 +106,7 @@ public class Complaint {
     public void print() {
         System.out.println("Complaint Id: " + cid);
         System.out.println("Complaint Description: " + cdes);
+        System.out.println("Complaint Status: " + s.getStateName());
         System.out.println("Type: " + type);
         System.out.println("Department: " + (d != null ? d.getName() : "null"));
     }

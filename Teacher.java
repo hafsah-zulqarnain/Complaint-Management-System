@@ -112,13 +112,17 @@ public class Teacher extends User{
 
     
 
-    public void loadComplaintsFromFile(String username, ArrayList<Complaint> c) {
+    public void loadComplaintsFromFile(String username) {
+        ArrayList<Complaint> c = new ArrayList<>(); // Initialize the ArrayList
+        FileManager.loadAllComplaintsFromFile(c);
         for (Complaint complaint : c) {
             if ((complaint.t.getUsername()).equals(username)) {
                 // Initialize the Dept field in the new Complaint object
                 
                 Complaint newComplaint = new Complaint(complaint);
+                System.out.println("");
                 this.complaints.add(newComplaint);
+
             }
         }
     }
