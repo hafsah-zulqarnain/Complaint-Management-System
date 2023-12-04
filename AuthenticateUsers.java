@@ -111,6 +111,7 @@ public class AuthenticateUsers {
                     }
 
                 }
+               
                 if (designation.equals("manager")) {
                     Manager m=new Manager();
                     m.setUsername(checkUsername);
@@ -119,6 +120,7 @@ public class AuthenticateUsers {
                     System.out.println("Press 1 to view complaints from your department: ");
                     System.out.println("Press 2 to view your profile: ");
                     System.out.println("Press 3 to view employees in your department: ");
+                    System.out.println("Press 4 to assign employees complaints: ");
                     String option=scanner.nextLine();
                     if(option.equals("1"))
                     {
@@ -135,6 +137,52 @@ public class AuthenticateUsers {
                          m.loadManagerEmployees();
                          m.DisplayDeptEmployees();
                     }
+                    if(option.equals("4"))
+                    {
+                        m.loadManagerComplaints();
+                        m.loadManagerEmployees();
+                        m.DisplayDeptEmployees();
+                        boolean complaintExists = false;
+                        boolean EmployeeExists = false;
+                        System.out.println("Enter complaint id:");
+                        int complaintId = Integer.parseInt(scanner.nextLine().trim());
+                        
+                        
+                        System.out.println("Enter employee username:");
+                        String employeeUsername = scanner.nextLine().trim();
+                        for (Complaint complaint : m.getComplaints()) {
+                            if (complaint.getCid()==(complaintId)) {
+                                complaintExists = true;
+                               
+                                break;
+                            }
+                        }
+
+                         for (Employee e : m.getEmployees()) {
+                           // System.out.println(e.getUsername());
+                            if (e.getUsername().equals(employeeUsername)) {
+                              
+                                EmployeeExists = true;
+                                break;
+                            }
+                            //e.displayEmployeeInfo();
+                        }
+                        
+                        if(complaintExists==false)
+                        {
+                            System.out.println("Complaint doesn't exists in this department");
+                        }
+                        if(EmployeeExists==false)
+                        {
+                            System.out.println("No such Employee exists in this department");
+
+                        }
+                        if(complaintExists&& EmployeeExists)
+                        {
+                            m.assignComplaint(complaintId, employeeUsername);
+                        }
+                        
+                     }
                     
                    
                 }

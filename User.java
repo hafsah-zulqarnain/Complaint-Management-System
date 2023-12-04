@@ -1,7 +1,7 @@
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class User implements Serializable{
+public class User{
     public String username;
     String password;
     String designation;
@@ -19,7 +19,7 @@ public class User implements Serializable{
         designation=d;
     }
     
-    String getUsername()
+    public String getUsername()
     {
         return username;
     }

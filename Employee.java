@@ -27,6 +27,11 @@ public class Employee extends User {
         this.department.setName(d);
     }
 
+    void setEmployee(Employee e)
+    {
+        this.name = e.name;
+        this.department = e.department;
+    }
     // Getter and Setter methods
     public String getName() {
         return name;

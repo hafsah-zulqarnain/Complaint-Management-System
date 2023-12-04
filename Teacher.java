@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.Date;
+
 
 public class Teacher extends User{
     String subject;
@@ -95,13 +97,16 @@ public class Teacher extends User{
             newComplaint.setComplaint(id, cdes, t,this.username,dept);
             //newComplaint.print();
             complaints.add(newComplaint);
-
+           
             // Write complaint to file
             FileManager.writeComplaintToFile(id,state ,t, teacher, dept, cdes);
+            LocalDate currentDate = LocalDate.now();
+            FileManager.writeStateChangesToFile(id, state, currentDate);
+
         } catch (Exception e) {
             System.out.println("Error reading input. Please make sure to provide valid input.");
         } finally {
-            scanner.close();
+           // scanner.close();
         }
     }
 

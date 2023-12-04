@@ -46,6 +46,26 @@ public class Complaint {
         s=new New();
     }
 
+    public void setComplaint(Complaint other)
+    {
+        this.cid = other.cid;
+        this.cdes = other.cdes;
+        this.type = other.type;
+
+        if (other.t != null) {
+            this.t = new Teacher(other.t);
+        } else {
+            this.t = null;
+        }
+
+        if (other.d != null) {
+            this.d = new Dept(other.d);
+        } else {
+            this.d = null;
+        }
+
+        this.s= other.s;
+    }
     public Complaint(Complaint other) {
         this.cid = other.cid;
         this.cdes = other.cdes;
@@ -87,5 +107,10 @@ public class Complaint {
         System.out.println("Complaint Description: " + cdes);
         System.out.println("Type: " + type);
         System.out.println("Department: " + (d != null ? d.getName() : "null"));
+    }
+
+
+    public int getCid() {
+        return cid;
     }
 }

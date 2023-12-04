@@ -1,3 +1,5 @@
+import java.io.File;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Manager extends User {
@@ -44,6 +46,10 @@ public class Manager extends User {
         return this.department.getComplaints();
     }
 
+    public ArrayList<Employee> getEmployees() {
+        return this.department.getEmployees();
+    }
+
     public void loadManagerComplaints() {
         // Load manager info from Managers.txt
        // FileManager.loadManagerInfoFromFile(this);
@@ -72,6 +78,7 @@ public class Manager extends User {
         }
     }
 
+    
     public void DisplayDeptEmployees()
     {
         for (Employee e : department.getEmployees())
@@ -79,6 +86,25 @@ public class Manager extends User {
             e.displayEmployeeInfo();
         }
     }
+
+    public void assignComplaint(int complaintid, String employee) {
+        // Check if the complaint and employee are valid
+        
+
+        // Update the complaint's state to "assigned"
+        //complaint.setState(new Assigned());
+
+        // Set the assigned employee for the complaint
+        
+
+        // Store the assignment information in a file
+        LocalDate currentDate = LocalDate.now();
+        FileManager.writeStateChangesToFile(complaintid, "assigned", currentDate);
+        FileManager.writeAssignmentsToFile(complaintid, employee);
+        FileManager.updateComplaintStateInFile(complaintid, "assigned");
+        System.out.println("Complaint assigned successfully.");
+    }
+
     public void print(){
         System.out.println("Username: "+ getUsername());
         System.out.println("Name: "+ getName());

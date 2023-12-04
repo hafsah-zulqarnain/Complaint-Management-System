@@ -10,8 +10,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 public class FileManager {
@@ -71,8 +76,8 @@ public class FileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-}
+    }
+       
 public static int getRecentComplaintId() {
     try (BufferedReader reader = new BufferedReader(new FileReader("Complaint.txt"))) {
         String line;
@@ -633,7 +638,52 @@ public static ArrayList<Employee> loadManagerEmployeesFromFile(Dept department) 
 
     return managerEmployees;
 }
+public static void writeStateChangesToFile(int id, String state, LocalDate currentDate) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("StateChanges.txt", true))) {
+            String complaintLine = String.format("%d\t\t%s\t\t%s", id, state ,currentDate);
+            writer.newLine();
+            writer.write(complaintLine);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+}
 
+public static void writeAssignmentsToFile(Object object,String empname) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Assignments.txt", true))) {
+            String complaintLine = String.format("%d\t\t%s", object, empname);
+            writer.newLine();
+            writer.write(complaintLine);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+}
+
+public static void updateComplaintStateInFile(int complaintId, String newState) {
+    try {
+        // Read all lines from the original complaints file
+        List<String> lines = Files.readAllLines(Paths.get("Complaint.txt"));
+
+        // Iterate through lines and update the state if the complaint ID matches
+        for (int i = 1; i < lines.size(); i++) {
+            String[] values = lines.get(i).split("\\s+");
+            int id = Integer.parseInt(values[0]);
+
+            if (id == complaintId) {
+                // Update the state (assuming the state is at index 1)
+                values[1] = newState;
+                lines.set(i, String.join("\t\t", values));
+                break;
+            }
+        }
+
+        // Write the updated lines back to the file
+        Files.write(Paths.get("Complaint.txt"), lines);
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
 
 }
 

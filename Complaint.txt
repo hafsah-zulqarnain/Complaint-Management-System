@@ -1,3 +1,2 @@
 cid		State		type		Teacher		Dept		cdes
-1		new		problem		hafsah		it		what
-2		new		equipment		hafsah		admin		no chairs
+1		assigned		problem		tania		admin		no		tea
