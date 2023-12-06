@@ -55,6 +55,8 @@ public class AuthenticateUsers {
                     System.out.println("Press 1 to view Complaints: ");
                     System.out.println("Press 2 to file a new complaint: ");
                     System.out.println("Press 3 to view your profile: ");
+                    System.out.println("Press 4 to view your notifications: ");
+                    System.out.println("Press 5 to view your complaint solution: ");
                     String option=scanner.nextLine();
                     
                     if(option.equals("1"))
@@ -71,6 +73,27 @@ public class AuthenticateUsers {
                     {
                         authenticatedTeacher.loadTeacherInfo();
                         authenticatedTeacher.print();
+                    }
+                    if(option.equals("4"))
+                    {
+                        authenticatedTeacher.viewNotifications();
+                    }
+                    if(option.equals("5"))
+                    {
+                        System.out.println("Enter complaint no: ");
+                        int complaintno=scanner.nextInt();
+                        scanner.nextLine();
+                        authenticatedTeacher.ViewAssignedComplaints(complaintno);;
+                        System.out.println("Are you satisfied with the solution: ");
+                        String satisfied=scanner.nextLine();
+                        if(satisfied.equals("yes"))
+                        {
+                            authenticatedTeacher.CloseComplain(complaintno);
+                        }
+                        if(satisfied.equals("no"))
+                        {
+                           authenticatedTeacher.reAssign(complaintno);
+                        }
                     }
                 }
                 if (designation.equals("admin")) {
@@ -126,7 +149,10 @@ public class AuthenticateUsers {
 
                         System.out.println("Enter complaint no: ");
                         int complaintno=scanner.nextInt();
-                        emp.markAssignmentCompleted(complaintno,dept);
+                        scanner.nextLine();
+                        System.out.println("Enter Solution: ");
+                        String sol= scanner.nextLine();
+                        emp.markAssignmentCompleted(complaintno,dept,sol);
                        
                         
                     }
@@ -143,6 +169,7 @@ public class AuthenticateUsers {
                     System.out.println("Press 3 to view employees in your department: ");
                     System.out.println("Press 4 to assign employees complaints: ");
                     System.out.println("Press 5 to view notifications ");
+                    System.out.println("Press 6 to view employees assignments solution: ");
                     String option=scanner.nextLine();
                     if(option.equals("1"))
                     {
@@ -163,12 +190,12 @@ public class AuthenticateUsers {
                     {
                         m.loadManagerComplaints();
                         m.loadManagerEmployees();
-                        m.DisplayDeptEmployees();
+                       // m.DisplayDeptEmployees();
                         boolean complaintExists = false;
                         boolean EmployeeExists = false;
                         System.out.println("Enter complaint id:");
                         int complaintId = Integer.parseInt(scanner.nextLine().trim());
-                        
+                       
                         
                         System.out.println("Enter employee username:");
                         String employeeUsername = scanner.nextLine().trim();
@@ -206,12 +233,32 @@ public class AuthenticateUsers {
                           // System.out.println(s);
                             m.assignComplaint(j);
                             j.addObserver(m);
+
                         }
                         
                      }
                      if(option.equals("5"))
                      {
                         m.viewNotifications();
+                     }
+                     if(option.equals("6"))
+                     {
+                        System.out.println("Enter complaint no: ");
+                        int complaintno=scanner.nextInt();
+                        scanner.nextLine();
+                        m.ViewAssignedComplaints(complaintno);
+                        System.out.println("Are you satisfied with the solution: ");
+                        String satisfied=scanner.nextLine();
+                        //scanner.nextLine();
+                        if(satisfied.equals("yes"))
+                        {
+                            m.ResolveComplain(complaintno);
+                        }
+                        if(satisfied.equals("no"))
+                        {
+                           m.reAssign(complaintno);
+                        }
+
                      }
                     
                    

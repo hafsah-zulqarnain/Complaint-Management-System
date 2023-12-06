@@ -76,7 +76,7 @@ public class Employee extends User {
         jobs=FileManager.loadAssignmentsForEmployee(getUsername());
     }
 
-    public void markAssignmentCompleted(int assignmentId,String dept) {
+    public void markAssignmentCompleted(int assignmentId,String dept,String s) {
         // Load the employee's assignments
         ArrayList<Job> assignments = FileManager.loadAssignmentsForEmployee(getUsername());
         Manager m=new Manager();
@@ -87,8 +87,9 @@ public class Employee extends User {
             if (assignment.getId() == assignmentId) {
                 // Mark the assignment as completed
                 assignment.addObserver(m);
-                assignment.markCompleted();
-
+                assignment.markCompleted(assignmentId);
+                assignment.setSolution(s);
+                //System.out.println(assignment.getSolution());
                 // Update the status in the Assignments.txt file
                 FileManager.updateAssignmentStatus(assignment);
 

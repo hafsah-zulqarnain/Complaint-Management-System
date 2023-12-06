@@ -35,15 +35,16 @@ public class Manager extends User implements Observer{
         return department.getName();
     }
 
-    public void update() {
+    public void update(int cid) {
         Date currentDate = new Date();
         // Add a notification when the update method is called
-        Notification notification = new Notification(this.getUsername(),currentDate,"A job in your department has been completed. Please review.");
-        notification.print();
+        String note="Complaint " + cid + " in your department has been completed. Please review.";
+        Notification notification = new Notification(this.getUsername(),currentDate,note);
+        //notification.print();
         notifications.add(notification);
 
         // Save the notification to a file
-        FileManager.saveNotificationToFile(notification,this);
+        FileManager.saveNotificationToFile(notification,this.getUsername());
     }
 
     public void viewNotifications() {
@@ -128,13 +129,59 @@ public class Manager extends User implements Observer{
         // Store the assignment information in a file
         LocalDate currentDate = LocalDate.now();
         FileManager.writeStateChangesToFile(j.getId(), "assigned", currentDate);
-        boolean sttus=j.getJobStatus();
+        //boolean sttus=j.getJobStatus();
         System.out.println("");
         FileManager.writeAssignmentsToFile(j);
         FileManager.updateComplaintStateInFile(j.getId(), "assigned");
         System.out.println("Complaint assigned successfully.");
     }
 
+    public void reAssign(int id) {
+
+        // Store the assignment information in a file
+        LocalDate currentDate = LocalDate.now();
+        FileManager.writeStateChangesToFile(id, "assigned", currentDate);
+        //boolean sttus=j.getJobStatus();
+        System.out.println("");
+        FileManager.updateAssignment(id);
+        FileManager.updateComplaintStateInFile(id, "assigned");
+        System.out.println("Complaint reassigned successfully.");
+    }
+
+    public void ResolveComplain(int cid) {
+        LocalDate currentDate = LocalDate.now();
+        System.out.println("");
+        FileManager.writeStateChangesToFile(cid, "resolved", currentDate);
+        FileManager.updateComplaintStateInFile(cid, "resolved");
+        String teacherUsername = FileManager.findTeacherForComplaint(cid);
+        //System.out.println(teacherUsername);
+        if (teacherUsername != null) {
+            Teacher t = FileManager.findTeacherByUsername(teacherUsername);
+            System.out.println(t.getSubject());
+            if (t != null) {
+                ArrayList<Complaint> complaints = new ArrayList<>();
+                FileManager.loadAllComplaintsFromFile(complaints);
+    
+                for (Complaint c : complaints) {
+                    if (c.getCid() == cid) {
+                        c.addObserver(t);
+                        c.markResolved(cid);
+                    }
+                }
+    
+                System.out.println("Complaint resolved successfully.");
+            } else {
+                System.out.println("Teacher not found for the given complaint ID.");
+            }
+        } else {
+            System.out.println("Teacher username not found for the given complaint ID.");
+        }
+    }
+    public void ViewAssignedComplaints(int cid)
+    {
+        String sol=FileManager.viewAssignedComplaintSolutions(cid);
+        System.out.println(sol);
+    }
     public void print(){
         System.out.println("Username: "+ getUsername());
         System.out.println("Name: "+ getName());

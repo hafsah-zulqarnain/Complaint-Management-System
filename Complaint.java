@@ -1,10 +1,13 @@
-public class Complaint {
+import java.util.ArrayList;
+
+public class Complaint implements Subject{
     int cid; // complaint id
     String cdes; // complaint description
     String type; // complaint type - 1) problem 2) requirement of service or equipment
     Teacher t;
     Dept d;
     State s;
+    private ArrayList<Observer> observers = new ArrayList<>();
 
     public Complaint() {
         cid = 0;
@@ -46,6 +49,10 @@ public class Complaint {
         s=new New();
     }
 
+    public void markResolved(int cid) {
+       
+        notifyObservers(cid);
+    }
     public void setComplaint(Complaint other)
     {
         this.cid = other.cid;
@@ -111,6 +118,23 @@ public class Complaint {
         System.out.println("Department: " + (d != null ? d.getName() : "null"));
     }
 
+    
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(int cid) {
+        for (Observer observer : observers) {
+            observer.update(cid);
+        }
+    }
 
     public int getCid() {
         return cid;

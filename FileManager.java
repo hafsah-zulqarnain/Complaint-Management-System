@@ -660,7 +660,7 @@ public static void writeAssignmentsToFile(Job j) {
         // Convert boolean to an appropriate representation (e.g., "Completed" or "Not Completed")
         String statusString = jobStatus ? "true" : "false";
        // System.out.println(statusString);
-        String complaintLine = String.format("%d\t\t%s\t\t%s", j.getId(), j.getEmployeename(), statusString);
+        String complaintLine = String.format("%d\t\t%s\t\t%s\t\t%s", j.getId(), j.getEmployeename(), statusString,j.getSolution());
         writer.newLine();  // Move the newLine after writing the line
         writer.write(complaintLine);
 
@@ -671,11 +671,52 @@ public static void writeAssignmentsToFile(Job j) {
     }
 }
 
+public static void updateAssignment(int cid) {
+    String filePath = "Assignments.txt";
+    ArrayList<String> lines = new ArrayList<>();
+
+    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        String line;
+        reader.readLine(); // Skip the header line
+        while ((line = reader.readLine()) != null) {
+            String[] values = line.split("\t\t");
+            int id = Integer.parseInt(values[0].trim());
+
+            if (id == cid) {
+                // Update the status and solution in the line
+                values[2] = "false";  // Set job status to false
+                values[3] = "no solution";  // Set solution to "no solution"
+                line = String.join("\t\t", values);
+            }
+
+            lines.add(line);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+        writer.write("cid\t\tempname\t\tJobStatus\t\tSolution");
+        writer.newLine();  // Add a new line after the header
+
+        for (String line : lines) {
+            writer.write(line);
+            writer.newLine();
+        }
+
+        // Ensure that the writer is flushed to the file
+        writer.flush();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
 
 public static void updateComplaintStateInFile(int complaintId, String newState) {
     try {
         // Read all lines from the original complaints file
         List<String> lines = Files.readAllLines(Paths.get("Complaint.txt"));
+
 
         // Iterate through lines and update the state if the complaint ID matches
         for (int i = 1; i < lines.size(); i++) {
@@ -747,7 +788,9 @@ public static void updateAssignmentStatus(Job assignment) {
             if (id == assignment.getId()) {
                 // Update the status in the line
                 values[2] = String.valueOf(assignment.getJobStatus());
+                values[3] = (assignment.getSolution());
                 line = String.join("\t\t", values);
+
             }
 
             lines.add(line);
@@ -757,12 +800,11 @@ public static void updateAssignmentStatus(Job assignment) {
     }
 
     // Write the updated lines back to the file
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-        writer.write("Cid\t\tEmpName\t\tJobStatus");
-        writer.newLine();
+    try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
+        writer.println("Cid\t\tEmpName\t\tJobStatus\t\tSolution");
         for (String line : lines) {
             writer.write(line);
-            writer.newLine();
+            
         }
     } catch (IOException e) {
         e.printStackTrace();
@@ -791,16 +833,18 @@ public static void loadManagerDeptFromFile(Manager manager,String d) {
         e.printStackTrace();
     }
 }
-public static void saveNotificationToFile(Notification notification, Manager m) {
+public static void saveNotificationToFile(Notification notification, String username) {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter("notifications.txt", true))) {
-        String notificationLine = String.format("%s\t\t%s\t\t%s", m.getUsername() ,notification.getTimestamp(), notification.getMessage());
+        String notificationLine = String.format("%s\t\t%s\t\t%s", username ,notification.getTimestamp(), notification.getMessage());
         writer.newLine();
         writer.write(notificationLine);
     } catch (IOException e) {
         e.printStackTrace();
     }
 }
-public static List<Notification> loadNotificationsFromFile(String filePath, Manager m) {
+
+
+public static List<Notification> loadNotificationsFromFile(String filePath, User m) {
     List<Notification> notifications = new ArrayList<>();
 
     try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -834,4 +878,74 @@ public static List<Notification> loadNotificationsFromFile(String filePath, Mana
 
     return notifications;
 }
+public static String viewAssignedComplaintSolutions(int complaintId) {
+    String solutions= null;
+    String filePath = "Assignments.txt";
+
+    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        String line;
+        reader.readLine(); // Skip the header line
+        while ((line = reader.readLine()) != null) {
+            String[] values = line.split("\t\t");
+            int id = Integer.parseInt(values[0].trim());
+
+            if (id == complaintId) {
+                solutions = values[3].trim();
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    return solutions;
+}
+
+public static String findTeacherForComplaint(int complaintId) {
+    String filePath = "Complaint.txt";
+
+    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        String line;
+        reader.readLine(); // Skip the header line
+        while ((line = reader.readLine()) != null) {
+            String[] values = line.split("\t\t");
+            int id = Integer.parseInt(values[0].trim());
+
+            if (id == complaintId) {
+                //System.out.println(values[3].trim());
+                return values[3].trim();
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    return null; // Return null if the complaint ID is not found
+}
+public static Teacher findTeacherByUsername(String username) {
+    String filePath = "Teachers.txt";
+
+    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        String line;
+        reader.readLine(); // Skip the header line
+        while ((line = reader.readLine()) != null) {
+            String[] values = line.split("\t\t");
+            String teacherUsername = values[0].trim();
+
+            if (teacherUsername.equals(username)) {
+                Teacher teacher = new Teacher();
+                teacher.setUsername(teacherUsername);
+                teacher.setName(values[1]); // Assuming teacher's name is in the second column
+                teacher.setSubject(values[2]);
+                teacher.setTdept(values[3].trim());
+                // Set other properties as needed
+                return teacher;
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    return null; // Return null if the teacher username is not found
+}
+
 }

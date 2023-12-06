@@ -9,27 +9,51 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Date;
+import java.util.List;
 
 
-public class Teacher extends User{
+public class Teacher extends User implements Observer{
     String subject;
     String tdept;
     String name;
     ArrayList<Complaint> complaints; // Using ArrayList instead of array
+    private List<Notification> notifications;
 
     public Teacher() {
         name =null;
         subject = null;
         tdept=null;
         complaints = new ArrayList<>();
+        this.notifications = new ArrayList<>();
     }
 
+    public void update(int cid) {
+        Date currentDate = new Date();
+        // Add a notification when the update method is called
+        String note="Complaint " + cid + "  filed by you has been resolved . Please Review";
+        Notification notification = new Notification(this.getUsername(),currentDate,note);
+        //notification.print();
+        notifications.add(notification);
+
+        // Save the notification to a file
+        FileManager.saveNotificationToFile(notification,this.getUsername());
+    }
+
+    public void viewNotifications() {
+        // Display notifications to the manager
+        List<Notification> notifications = FileManager.loadNotificationsFromFile("notifications.txt",this);
+        for (Notification notification : notifications) {
+            System.out.println("Timestamp: " + notification.getTimestamp() + " - " + notification.getMessage());
+        }
+        notifications.clear(); // Clear notifications after viewing
+    }
 
     Teacher(String s ,String de, String n) {
         name= n;
         subject = s;
         tdept = de;
         complaints = new ArrayList<>();
+        this.notifications = new ArrayList<>();
     }
 
     // Copy constructor
@@ -128,6 +152,31 @@ public class Teacher extends User{
     }
     
     
+    public void ViewAssignedComplaints(int cid)
+    {
+        String sol=FileManager.viewAssignedComplaintSolutions(cid);
+        System.out.println(sol);
+    }
+
+    public void CloseComplain(int cid) {
+        LocalDate currentDate = LocalDate.now();
+        System.out.println("");
+        FileManager.writeStateChangesToFile(cid, "Closed", currentDate);
+        FileManager.updateComplaintStateInFile(cid, "Closed");
+        System.out.println("Complaint resolved successfully.");
+    }
+
+    public void reAssign(int id) {
+
+        // Store the assignment information in a file
+        LocalDate currentDate = LocalDate.now();
+        FileManager.writeStateChangesToFile(id, "assigned", currentDate);
+        //boolean sttus=j.getJobStatus();
+        System.out.println("");
+        FileManager.updateAssignment(id);
+        FileManager.updateComplaintStateInFile(id, "assigned");
+        System.out.println("Complaint solution rejected and reassigned successfully.");
+    }
     public void displayComplaints() {
         if (complaints.isEmpty()) {
             System.out.println("No complaints to display for this teacher.");

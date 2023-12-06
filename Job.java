@@ -5,18 +5,23 @@ public class Job implements Subject {
     private boolean isCompleted;
     private int id;
     private String employeename;
-
+    private String solution;
     
 
     public Job(int id, String empname) {
         this.id = id;
         employeename = empname;
         this.isCompleted = false;
+        this.solution="No Solution";
     }
 
-    public void markCompleted() {
+    public Job(int id) {
+        this.id = id;
+    }
+
+    public void markCompleted(int cid) {
         isCompleted = true;
-        notifyObservers();
+        notifyObservers(cid);
     }
 
     void print()
@@ -32,6 +37,12 @@ public class Job implements Subject {
         return id;
     }
 
+    public void setSolution(String solution) {
+        this.solution = solution;
+    }
+    public String getSolution() {
+        return solution;
+    }
     public void setCompleted(boolean isCompleted) {
         this.isCompleted = isCompleted;
     }
@@ -49,9 +60,9 @@ public class Job implements Subject {
     }
 
     @Override
-    public void notifyObservers() {
+    public void notifyObservers(int cid) {
         for (Observer observer : observers) {
-            observer.update();
+            observer.update(cid);
         }
     }
 }
