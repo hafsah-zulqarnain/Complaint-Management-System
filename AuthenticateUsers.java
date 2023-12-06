@@ -102,11 +102,33 @@ public class AuthenticateUsers {
                     emp.setUsername(checkUsername);
                     //emp.setPassword(checkPassword);
                     System.out.println("Press 1 to view your profile: ");
+                    System.out.println("Press 2 to view your Assignemnts: ");
+                    System.out.println("Press 3 to complete an assignemnts: ");
                     String option=scanner.nextLine();
                     if(option.equals("1"))
                     {
                         emp.loadEmployeeInfo();
                         emp.displayEmployeeInfo();
+                    }
+                     if(option.equals("2"))
+                    {
+                        emp.loadEmployeeInfo();
+                        emp.loadAssignments();
+                        emp.DisplayAssignments();
+                    }
+
+                    if(option.equals("3"))
+                    {
+                        emp.loadEmployeeInfo();
+                       // emp.loadAssignments();
+                        //emp.DisplayAssignments();
+                        String dept=emp.getDepartment();
+
+                        System.out.println("Enter complaint no: ");
+                        int complaintno=scanner.nextInt();
+                        emp.markAssignmentCompleted(complaintno,dept);
+                       
+                        
                     }
 
                 }
@@ -120,6 +142,7 @@ public class AuthenticateUsers {
                     System.out.println("Press 2 to view your profile: ");
                     System.out.println("Press 3 to view employees in your department: ");
                     System.out.println("Press 4 to assign employees complaints: ");
+                    System.out.println("Press 5 to view notifications ");
                     String option=scanner.nextLine();
                     if(option.equals("1"))
                     {
@@ -178,9 +201,17 @@ public class AuthenticateUsers {
                         }
                         if(complaintExists&& EmployeeExists)
                         {
-                            m.assignComplaint(complaintId, employeeUsername);
+                            Job j=new Job(complaintId, employeeUsername);
+                           // boolean s=j.getJobStatus();
+                          // System.out.println(s);
+                            m.assignComplaint(j);
+                            j.addObserver(m);
                         }
                         
+                     }
+                     if(option.equals("5"))
+                     {
+                        m.viewNotifications();
                      }
                     
                    

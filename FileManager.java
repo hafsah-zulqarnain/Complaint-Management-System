@@ -13,10 +13,13 @@ import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class FileManager {
@@ -649,16 +652,25 @@ public static void writeStateChangesToFile(int id, String state, LocalDate curre
         
 }
 
-public static void writeAssignmentsToFile(Object object,String empname) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Assignments.txt", true))) {
-            String complaintLine = String.format("%d\t\t%s", object, empname);
-            writer.newLine();
-            writer.write(complaintLine);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
+public static void writeAssignmentsToFile(Job j) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter("Assignments.txt", true))) {
+        boolean jobStatus = j.getJobStatus();
+        //System.out.println(jobStatus);
+
+        // Convert boolean to an appropriate representation (e.g., "Completed" or "Not Completed")
+        String statusString = jobStatus ? "true" : "false";
+       // System.out.println(statusString);
+        String complaintLine = String.format("%d\t\t%s\t\t%s", j.getId(), j.getEmployeename(), statusString);
+        writer.newLine();  // Move the newLine after writing the line
+        writer.write(complaintLine);
+
+        // Ensure that the writer is flushed to the file
+      //  writer.flush();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
 }
+
 
 public static void updateComplaintStateInFile(int complaintId, String newState) {
     try {
@@ -685,5 +697,141 @@ public static void updateComplaintStateInFile(int complaintId, String newState) 
     }
 }
 
+
+public static ArrayList<Job> loadAssignmentsForEmployee(String employeeUsername) {
+    ArrayList<Job> assignments = new ArrayList<>();
+    try (BufferedReader reader = new BufferedReader(new FileReader("Assignments.txt"))) {
+        reader.readLine(); // Read and store the header line
+        String line;
+        while ((line = reader.readLine()) != null) {
+            try (Scanner scanner = new Scanner(line)) {
+                //System.out.println(line);
+                //scanner.nextLine(); // Skip the first line
+                String[] values = line.split("\t\t");
+                int cid = Integer.parseInt(values[0]);
+                String empname = values[1];
+                String status = values[2];
+
+                if (empname.equals(employeeUsername)) {
+                    Job assignment = new Job(cid, empname);
+                    if (status.equals("true")) {
+                        assignment.setCompleted(true);
+                    } else if (status.equals("false")) {
+                        assignment.setCompleted(false);
+                    } else {
+                        // Handle unrecognized status (optional)
+                    }
+                    assignments.add(assignment);
+                }
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    return assignments;
 }
 
+
+public static void updateAssignmentStatus(Job assignment) {
+    String filePath = "Assignments.txt";
+    ArrayList<String> lines = new ArrayList<>();
+
+    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        String line;
+        reader.readLine();
+        while ((line = reader.readLine()) != null) {
+            String[] values = line.split("\t\t");
+            int id = Integer.parseInt(values[0].trim());
+
+            if (id == assignment.getId()) {
+                // Update the status in the line
+                values[2] = String.valueOf(assignment.getJobStatus());
+                line = String.join("\t\t", values);
+            }
+
+            lines.add(line);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    // Write the updated lines back to the file
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+        writer.write("Cid\t\tEmpName\t\tJobStatus");
+        writer.newLine();
+        for (String line : lines) {
+            writer.write(line);
+            writer.newLine();
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+}
+
+public static void loadManagerDeptFromFile(Manager manager,String d) {
+    try (BufferedReader reader = new BufferedReader(new FileReader("Managers.txt"))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] values = line.split("\\s+"); // Assuming values are separated by whitespace
+
+            // Assuming the username is in the first column of the file
+            String dept = values[2];
+           // System.out.println(dept+" "+d);
+            if (dept.equals(d)) {
+                // Assuming the structure of the file is: Username Name Department
+                manager.setUsername(values[0]);
+                manager.setName(values[1]);
+                manager.setDepartment(values[2]);
+                break; // Stop reading after finding the matching username
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+public static void saveNotificationToFile(Notification notification, Manager m) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter("notifications.txt", true))) {
+        String notificationLine = String.format("%s\t\t%s\t\t%s", m.getUsername() ,notification.getTimestamp(), notification.getMessage());
+        writer.newLine();
+        writer.write(notificationLine);
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+public static List<Notification> loadNotificationsFromFile(String filePath, Manager m) {
+    List<Notification> notifications = new ArrayList<>();
+
+    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        String line;
+        reader.readLine();
+        while ((line = reader.readLine()) != null) {
+            try {
+                String[] values = line.split("\t\t");
+
+                // Ensure the array has enough elements before accessing specific indexes
+                if (values.length >= 3) {
+                    String username = values[0].trim();
+                     java.util.Date timestamp = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US).parse(values[1].trim());
+                    String message = values[2].trim();
+
+                    if (m.getUsername().equals(username)) {
+                        Notification notification = new Notification(username, timestamp, message);
+                        notifications.add(notification);
+                    }
+                } else {
+                    // Log or handle the case where the line doesn't have enough elements
+                    System.out.println("Skipping invalid line: " + line);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace(); // Handle date parsing exception
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace(); // Handle IO exception
+    }
+
+    return notifications;
+}
+}

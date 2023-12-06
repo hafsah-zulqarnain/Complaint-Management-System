@@ -1,0 +1,57 @@
+import java.util.ArrayList;
+
+public class Job implements Subject {
+    private ArrayList<Observer> observers = new ArrayList<>();
+    private boolean isCompleted;
+    private int id;
+    private String employeename;
+
+    
+
+    public Job(int id, String empname) {
+        this.id = id;
+        employeename = empname;
+        this.isCompleted = false;
+    }
+
+    public void markCompleted() {
+        isCompleted = true;
+        notifyObservers();
+    }
+
+    void print()
+    {
+        System.out.println("cid: "+id);
+        System.out.println("complaint status: "+isCompleted);
+    }
+
+    public String getEmployeename() {
+        return employeename;
+    }
+    public int getId() {
+        return id;
+    }
+
+    public void setCompleted(boolean isCompleted) {
+        this.isCompleted = isCompleted;
+    }
+    public boolean getJobStatus() {
+        return isCompleted;
+    }
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update();
+        }
+    }
+}

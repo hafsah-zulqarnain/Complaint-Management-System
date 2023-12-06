@@ -1,3 +1,2 @@
-Cid		EmployeeUsername
-1		taha
-1		taha
+Cid		EmpName		JobStatus
+1		taha		true
