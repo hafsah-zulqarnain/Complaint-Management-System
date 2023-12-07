@@ -66,7 +66,7 @@ public class Employee extends User {
     
     public void displayEmployeeInfo() {
        
-        System.out.println("Username: " + getUsername());
+        System.out.println(ConsoleInterface.WHITE+"Username: " + getUsername());
         System.out.println("Name: " + name);
         System.out.println("Department: " + department.getName()); // Assuming Dept has a getName() method
     }
@@ -93,19 +93,22 @@ public class Employee extends User {
                 // Update the status in the Assignments.txt file
                 FileManager.updateAssignmentStatus(assignment);
 
-                System.out.println("Assignment marked as completed successfully.");
+                System.out.println(ConsoleInterface.ANSI_GREEN+"Assignment marked as completed successfully.");
                 return;
             }
         }
 
         
-        System.out.println("Assignment not found with ID: " + assignmentId);
+        System.out.println(ConsoleInterface.ANSI_RED+"Assignment not found with ID: " + assignmentId);
     }
     public void DisplayAssignments()
     {
         for(Job j:jobs)
         {
+            System.out.println(ConsoleInterface.ANSI_CYAN+"__________________________________________________________"+ConsoleInterface.ANSI_CYAN);
+            System.out.println("");
             j.print();
+            System.out.println(ConsoleInterface.ANSI_CYAN+"__________________________________________________________"+ConsoleInterface.ANSI_CYAN);
         }
     }
 }

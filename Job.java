@@ -26,7 +26,7 @@ public class Job implements Subject {
 
     void print()
     {
-        System.out.println("cid: "+id);
+        System.out.println(ConsoleInterface.WHITE_BOLD+"cid: "+id);
         System.out.println("complaint status: "+isCompleted);
     }
 

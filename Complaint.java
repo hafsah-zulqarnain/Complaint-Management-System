@@ -131,11 +131,11 @@ public class Complaint implements Subject{
         return s;
     }
     public void print() {
-        System.out.println("Complaint Id: " + cid);
-        System.out.println("Complaint Description: " + cdes);
-        System.out.println("Complaint Status: " + s.getStateName());
-        System.out.println("Type: " + type);
-        System.out.println("Department: " + (d != null ? d.getName() : "null"));
+        System.out.println(ConsoleInterface.WHITE+"COMPAINT ID: "+ ConsoleInterface.WHITE + cid+ConsoleInterface.WHITE);
+        System.out.println(ConsoleInterface.WHITE+"CCOMPLAINT DESCCRIPTION: "+ConsoleInterface.WHITE+ ConsoleInterface.WHITE + cdes+ ConsoleInterface.WHITE);
+        System.out.println(ConsoleInterface.WHITE+"COMPLAINT STATUS: " + ConsoleInterface.WHITE+ ConsoleInterface.WHITE +s.getStateName()+ConsoleInterface.WHITE);
+        System.out.println(ConsoleInterface.WHITE+"TYPE: "+ConsoleInterface.WHITE+ ConsoleInterface.WHITE + type+ConsoleInterface.WHITE);
+        System.out.println(ConsoleInterface.WHITE+"DEPARTMENT: " +ConsoleInterface.WHITE+  ConsoleInterface.WHITE+(d != null ? d.getName() : "null")+ ConsoleInterface.WHITE);
     }
 
     

@@ -219,8 +219,8 @@ public static int getRecentComplaintId() {
          public static void writeUserToFile(User user, String fileName) throws IOException {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
         
-            writer.newLine();
             writer.write(user.getUsername() + "\t\t" + user.getPassword() + "\t\t" + user.getDesignation());
+            writer.newLine();
             writer.close();
         }
         
@@ -357,10 +357,7 @@ public static void writeUsersToFile(ArrayList<User> users, String fileName) {
 
 public static void removeTeacherFromFile(String usernameToRemove, String fileName) {
     ArrayList<Teacher> teachers = new ArrayList<>(loadTeachersFromFile(fileName));
-    for (Teacher t: teachers)
-    {
-        t.print();
-    }
+   
     Iterator<Teacher> iterator = teachers.iterator();
     while (iterator.hasNext()) {
         Teacher t = iterator.next();
@@ -767,7 +764,7 @@ public static void writeStateChangesToFile(int id, String state, LocalDate curre
 
     // Check if the file needs to be created
     if (!file.exists()) {
-        System.out.println("File does not exist. Creating a new file and writing header.");
+        //System.out.println("File does not exist. Creating a new file and writing header.");
         try {
             file.createNewFile();
 
@@ -799,7 +796,7 @@ public static void writeAssignmentsToFile(Job j) {
 
     // Check if the file needs to be created
     if (!file.exists()) {
-        System.out.println("File does not exist. Creating a new file and writing header.");
+        //System.out.println("File does not exist. Creating a new file and writing header.");
         try {
             file.createNewFile();
 

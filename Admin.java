@@ -19,7 +19,7 @@ public class Admin extends User {
             System.out.print("Username: ");
             String newUsername = scanner.nextLine();
             if (usernameExists(newUsername)) {
-                System.out.println("User with the given username already exists. Cannot add duplicate users.");
+                System.out.println(ConsoleInterface.ANSI_RED+"User with the given username already exists. Cannot add duplicate users.");
                 return;
             }
             System.out.print("Password: ");
@@ -44,7 +44,7 @@ public class Admin extends User {
                 FileManager.writeTeacherToFile(t, "Teachers.txt");
                 AllUsers.add(t);
                 FileManager.writeUserToFile(t, "Authen.txt"); 
-                System.out.println("User added successfully.");
+                System.out.println(ConsoleInterface.GREEN_BOLD+"User added successfully."+ConsoleInterface.GREEN_BOLD);
 
             }
 
@@ -67,7 +67,7 @@ public class Admin extends User {
                 FileManager.writeEmployeeToFile(e, "Employees.txt");
                 AllUsers.add(e);
                 FileManager.writeUserToFile(e, "Authen.txt");
-                 System.out.println("User added successfully.");
+                 System.out.println(ConsoleInterface.GREEN_BOLD+"User added successfully.");
 
             }
 
@@ -95,10 +95,10 @@ public class Admin extends User {
                      FileManager.writeManagerToFile(m, "Managers.txt");
                      FileManager.writeUserToFile(m, "Authen.txt");
                      AllUsers.add(m);
-                     System.out.println("User added successfully.");
+                     System.out.println(ConsoleInterface.GREEN_BOLD+"User added successfully.");
                 }
                 else{
-                    System.out.println("Department already has a manager");
+                    System.out.println(ConsoleInterface.RED_BOLD+"Department already has a manager");
                 }
                 }
                 else{
@@ -162,7 +162,7 @@ public class Admin extends User {
     
     
 
-            System.out.println("User removed successfully.");
+            System.out.println(ConsoleInterface.ANSI_GREEN+"User removed successfully.");
         } else {
             System.out.println("User not found.");
         }
@@ -172,7 +172,10 @@ public class Admin extends User {
         System.out.println("All Users in the System:");
         System.out.println("Username\tPassword\tDesignation");
         for (User user : AllUsers) {
-            System.out.println(user.getUsername() + "\t\t" + user.getPassword() + "\t\t" + user.getDesignation());
+            System.out.println(ConsoleInterface.ANSI_CYAN+"__________________________________________________________"+ConsoleInterface.ANSI_CYAN);
+            System.out.println("");
+            System.out.println(ConsoleInterface.WHITE+user.getUsername() + "\t\t" + user.getPassword() + "\t\t" + user.getDesignation());
+            System.out.println(ConsoleInterface.ANSI_CYAN+"__________________________________________________________"+ConsoleInterface.ANSI_CYAN);
         }
 
     }

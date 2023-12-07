@@ -49,6 +49,13 @@ public class Manager extends User implements Observer{
 
     public void viewNotifications() {
         // Display notifications to the manager
+        String filename = "notifications.txt";
+        File file = new File(filename);
+    
+        if (!file.exists()) {
+            System.out.println(ConsoleInterface.ANSI_RED + "No notifications.");
+            return;  // Exit the method if the file doesn't exist
+        }
         List<Notification> notifications = FileManager.loadNotificationsFromFile("notifications.txt",this);
         for (Notification notification : notifications) {
             System.out.println("Timestamp: " + notification.getTimestamp() + " - " + notification.getMessage());
@@ -103,7 +110,10 @@ public class Manager extends User implements Observer{
     {
         for ( Complaint c : department.getComplaints())
         {
+            System.out.println(ConsoleInterface.ANSI_CYAN+"__________________________________________________________"+ConsoleInterface.ANSI_CYAN);
+            System.out.println("");
             c.print();
+            System.out.println(ConsoleInterface.ANSI_CYAN+"__________________________________________________________"+ConsoleInterface.ANSI_CYAN);
         }
     }
 
@@ -112,7 +122,10 @@ public class Manager extends User implements Observer{
     {
         for (Employee e : department.getEmployees())
         {
+            System.out.println(ConsoleInterface.ANSI_CYAN+"__________________________________________________________"+ConsoleInterface.ANSI_CYAN);
+            System.out.println("");
             e.displayEmployeeInfo();
+            System.out.println(ConsoleInterface.ANSI_CYAN+"__________________________________________________________"+ConsoleInterface.ANSI_CYAN);
         }
     }
 
@@ -134,7 +147,7 @@ public class Manager extends User implements Observer{
         System.out.println("");
         FileManager.writeAssignmentsToFile(j);
         FileManager.updateComplaintStateInFile(j.getId(), "assigned");
-        System.out.println("Complaint assigned successfully.");
+        System.out.println(ConsoleInterface.ANSI_GREEN+"Complaint assigned successfully."+ConsoleInterface.ANSI_GREEN);
     }
 
     public void reAssign(int id) {
@@ -149,7 +162,7 @@ public class Manager extends User implements Observer{
         System.out.println("");
         FileManager.updateAssignment(id);
         FileManager.updateComplaintStateInFile(id,co.s.getStateName());
-        System.out.println("Complaint reassigned successfully.");
+        System.out.println(ConsoleInterface.ANSI_GREEN+"Complaint reassigned successfully.");
     }
 
     public void ResolveComplain(int cid) {
@@ -164,7 +177,7 @@ public class Manager extends User implements Observer{
         //System.out.println(teacherUsername);
         if (teacherUsername != null) {
             Teacher t = FileManager.findTeacherByUsername(teacherUsername);
-            System.out.println(t.getSubject());
+            //System.out.println(t.getSubject());
             ArrayList<Complaint> complaints = new ArrayList<>();
             FileManager.loadAllComplaintsFromFile(complaints);
    
@@ -175,18 +188,22 @@ public class Manager extends User implements Observer{
                 }
             }
    
-            System.out.println("Complaint resolved successfully.");
+            System.out.println(ConsoleInterface.ANSI_GREEN+"Complaint resolved successfully.");
         } else {
             System.out.println("Teacher username not found for the given complaint ID.");
         }
     }
     public void ViewAssignedComplaints(int cid)
     {
+
         String sol=FileManager.viewAssignedComplaintSolutions(cid);
+        System.out.println(ConsoleInterface.ANSI_CYAN+"__________________________________________________________"+ConsoleInterface.ANSI_CYAN);
+        System.out.println("");
         System.out.println(sol);
+        System.out.println(ConsoleInterface.ANSI_CYAN+"__________________________________________________________"+ConsoleInterface.ANSI_CYAN);
     }
     public void print(){
-        System.out.println("Username: "+ getUsername());
+        System.out.println(ConsoleInterface.WHITE+"Username: "+ getUsername());
         System.out.println("Name: "+ getName());
         System.out.println("Department: "+ getDepartment());
     }

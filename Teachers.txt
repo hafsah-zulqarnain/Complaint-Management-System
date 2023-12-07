@@ -1,3 +1,2 @@
 Username		Name		Subject		Department
 tania		tania		pf		cs
-maryam		maryam		biology		sciences

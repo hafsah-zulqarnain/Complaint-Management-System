@@ -20,6 +20,7 @@ public class Teacher extends User implements Observer{
     ArrayList<Complaint> complaints; // Using ArrayList instead of array
     private List<Notification> notifications;
 
+    
     public Teacher() {
         name =null;
         subject = null;
@@ -42,12 +43,27 @@ public class Teacher extends User implements Observer{
 
     public void viewNotifications() {
         // Display notifications to the manager
-        List<Notification> notifications = FileManager.loadNotificationsFromFile("notifications.txt",this);
-        for (Notification notification : notifications) {
-            System.out.println("Timestamp: " + notification.getTimestamp() + " - " + notification.getMessage());
+        String filename = "notifications.txt";
+        File file = new File(filename);
+    
+        if (!file.exists()) {
+            System.out.println(ConsoleInterface.ANSI_RED + "No notifications.");
+            return;  // Exit the method if the file doesn't exist
         }
+    
+        List<Notification> notifications = FileManager.loadNotificationsFromFile(filename, this);
+    
+        if (notifications.isEmpty()) {
+            System.out.println(ConsoleInterface.ANSI_RED + "No notifications.");
+        } else {
+            for (Notification notification : notifications) {
+                System.out.println(ConsoleInterface.ANSI_YELLOW + "Timestamp: " + notification.getTimestamp() + " - " + notification.getMessage());
+            }
+        }
+    
         notifications.clear(); // Clear notifications after viewing
     }
+    
 
     Teacher(String s ,String de, String n) {
         name= n;
@@ -96,7 +112,7 @@ public class Teacher extends User implements Observer{
     public void enterComplaint() {
         Complaint newComplaint = new Complaint();
         Scanner scanner = new Scanner(System.in);
-
+        ClearConsole.clearScreen();
         try {
             // Read the recent complaint ID from the file
             String fileName = "Complaint.txt";
@@ -122,10 +138,8 @@ public class Teacher extends User implements Observer{
             String cdes = scanner.nextLine();
 
             // Assuming the department is not available in the Teacher class
-            System.out.println("Select Department: ");
-            System.out.println("IT");
-            System.out.println("Accounts");
-            System.out.println("Admin");
+            System.out.println(ConsoleInterface.ANSI_YELLOW+"it                 "+"accounts"+"                          admin");
+            System.out.println(ConsoleInterface.WHITE+"Select Department: ");
             String dept = scanner.nextLine();
             String state="new";
             // Print and add complaint to the ArrayList
@@ -137,6 +151,7 @@ public class Teacher extends User implements Observer{
             FileManager.writeComplaintToFile(newComplaint);
             LocalDate currentDate = LocalDate.now();
             FileManager.writeStateChangesToFile(id, state, currentDate);
+            System.out.println(ConsoleInterface.ANSI_GREEN+"Complaint Filed Sucessfully");
 
         } catch (Exception e) {
             System.out.println("Error reading input. Please make sure to provide valid input.");
@@ -166,7 +181,7 @@ public class Teacher extends User implements Observer{
     public void ViewAssignedComplaints(int cid)
     {
         String sol=FileManager.viewAssignedComplaintSolutions(cid);
-        System.out.println(sol);
+        System.out.println(ConsoleInterface.WHITE+"Solution: "+sol);
     }
 
     public void CloseComplain(int cid) {
@@ -177,7 +192,7 @@ public class Teacher extends User implements Observer{
         System.out.println("");
         FileManager.writeStateChangesToFile(cid, co.s.getStateName(), currentDate);
         FileManager.updateComplaintStateInFile(cid,  co.s.getStateName());
-        System.out.println("Complaint resolved successfully.");
+        System.out.println(ConsoleInterface.ANSI_GREEN+"Complaint resolved successfully.");
     }
 
     public void reAssign(int id) {
@@ -192,14 +207,15 @@ public class Teacher extends User implements Observer{
         System.out.println("");
         FileManager.updateAssignment(id);
         FileManager.updateComplaintStateInFile(id, co.s.getStateName());
-        System.out.println("Complaint solution rejected");
+        System.out.println(ConsoleInterface.ANSI_RED+"Complaint solution rejected");
     }
     public void displayComplaints() {
+        
         if (complaints.isEmpty()) {
-            System.out.println("No complaints to display for this teacher.");
+            System.out.println(ConsoleInterface.ANSI_RED+"No complaints to display for this teacher."+ConsoleInterface.ANSI_RED);
         } else {
            
-            System.out.println("Complaints for Teacher " + username + ":");
+            
             for (Complaint complaint : complaints) {
                 complaint.print();
                
@@ -214,7 +230,7 @@ public class Teacher extends User implements Observer{
     
     public void print() {
 
-        System.out.println("Username: " + username);
+        System.out.println(ConsoleInterface.WHITE+"Username: " + username);
         System.out.println("Teacher Name: " + name);
         System.out.println("Subject : " + subject);
         System.out.println("Relevant Department : " + tdept);
