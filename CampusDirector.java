@@ -7,20 +7,28 @@ import java.util.Map;
 public class CampusDirector extends User {
 
     public static void viewComplaintSummary() {
-        Map<String, Integer> departmentComplaintCount = new HashMap<>();
+        Map<String, Map<String, Integer>> departmentStatusCount = new HashMap<>();
+        Map<String, Integer> departmentTotalCount = new HashMap<>();
+
         String fileName = "Complaint.txt";
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-            reader.readLine(); // discard the header line
+            reader.readLine();
 
-            // Read each line of the file
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split("\\s+");
 
                 if (data.length > 3) {
-                    String department = data[3]; // department is at index 3
-                    // Update the count for the department
-                    departmentComplaintCount.put(department, departmentComplaintCount.getOrDefault(department, 0) + 1);
+                    String department = data[4]; // department is at index 4
+                    String status = data[1]; // status is at index 1
+
+                    departmentStatusCount
+                            .computeIfAbsent(department, k -> new HashMap<>())
+                            .put(status, departmentStatusCount
+                                    .get(department)
+                                    .getOrDefault(status, 0) + 1);
+
+                    departmentTotalCount.put(department, departmentTotalCount.getOrDefault(department, 0) + 1);
                 } else {
                     System.out.println("Invalid data format in line: " + line);
                 }
@@ -29,10 +37,21 @@ public class CampusDirector extends User {
             e.printStackTrace();
         }
 
-        // Display the summary
-        System.out.println("Complaint Summary:");
-        for (Map.Entry<String, Integer> entry : departmentComplaintCount.entrySet()) {
-            System.out.println("Department: " + entry.getKey() + ", Complaints Received: " + entry.getValue());
+        System.out.println("Complaints Summary:");
+        for (Map.Entry<String, Map<String, Integer>> departmentEntry : departmentStatusCount.entrySet()) {
+            String department = departmentEntry.getKey();
+            System.out.println("Department name: " + department);
+
+            int totalComplaints = departmentTotalCount.getOrDefault(department, 0);
+            System.out.println("Total no of complaints: " + totalComplaints);
+
+            Map<String, Integer> statusCount = departmentEntry.getValue();
+            System.out.println("Total no of closed complaints: " + statusCount.getOrDefault("closed", 0));
+            System.out.println("Total no of open complaints: " + statusCount.getOrDefault("open", 0));
+            System.out.println("Total no of assigned complaints: " + statusCount.getOrDefault("assigned", 0));
+            System.out.println("Total no of resolved complaints: " + statusCount.getOrDefault("resolved", 0));
+
+            System.out.println();
         }
     }
 
