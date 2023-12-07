@@ -177,7 +177,12 @@ public class CampusDirector extends User {
                     if (cid == complaintId) {
                         String department = data[4];
                         String teacher = data[3];
-                        String description = data[5];
+
+                        StringBuilder descriptionBuilder = new StringBuilder();
+                        for (int i = 5; i < data.length; i++) {
+                            descriptionBuilder.append(data[i]).append(" ");
+                        }
+                        String description = descriptionBuilder.toString().trim();
 
                         return new String[] { department, teacher, description };
                     }
