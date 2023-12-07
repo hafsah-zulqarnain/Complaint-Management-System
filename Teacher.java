@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -82,6 +83,7 @@ public class Teacher extends User implements Observer{
    public String getTdept() {
        return tdept;
    }
+   
     // Add complaint
     //setComplaint(int id, String description, String type, String teacherUsername, String deptName
     void addComplaint(int id, String d, String t,String u, String dept) {
@@ -97,8 +99,17 @@ public class Teacher extends User implements Observer{
 
         try {
             // Read the recent complaint ID from the file
+            String fileName = "Complaint.txt";
+            File file = new File(fileName);
+            int id=0;
+            // Check if the file needs to be created
+            if (!file.exists()) {
+                id = 1;
+            }
+            else{
             int recentId = FileManager.getRecentComplaintId();
-            int id = recentId;
+            id = recentId;
+            }
 
             System.out.println("Enter Complaint type: ");
             System.out.println("Problem or equipment/service");
@@ -123,7 +134,7 @@ public class Teacher extends User implements Observer{
             complaints.add(newComplaint);
            
             // Write complaint to file
-            FileManager.writeComplaintToFile(id,state ,t, teacher, dept, cdes);
+            FileManager.writeComplaintToFile(newComplaint);
             LocalDate currentDate = LocalDate.now();
             FileManager.writeStateChangesToFile(id, state, currentDate);
 
@@ -159,23 +170,29 @@ public class Teacher extends User implements Observer{
     }
 
     public void CloseComplain(int cid) {
+        Complaint co=new Complaint();
+        co=FileManager.loadComplaintById(cid);
+        co.setState(new Closed());
         LocalDate currentDate = LocalDate.now();
         System.out.println("");
-        FileManager.writeStateChangesToFile(cid, "Closed", currentDate);
-        FileManager.updateComplaintStateInFile(cid, "Closed");
+        FileManager.writeStateChangesToFile(cid, co.s.getStateName(), currentDate);
+        FileManager.updateComplaintStateInFile(cid,  co.s.getStateName());
         System.out.println("Complaint resolved successfully.");
     }
 
     public void reAssign(int id) {
 
         // Store the assignment information in a file
+        Complaint co=new Complaint();
+        co=FileManager.loadComplaintById(id);
+        co.setState(new New());
         LocalDate currentDate = LocalDate.now();
-        FileManager.writeStateChangesToFile(id, "assigned", currentDate);
+        FileManager.writeStateChangesToFile(id,co.s.getStateName() ,currentDate);
         //boolean sttus=j.getJobStatus();
         System.out.println("");
         FileManager.updateAssignment(id);
-        FileManager.updateComplaintStateInFile(id, "assigned");
-        System.out.println("Complaint solution rejected and reassigned successfully.");
+        FileManager.updateComplaintStateInFile(id, co.s.getStateName());
+        System.out.println("Complaint solution rejected");
     }
     public void displayComplaints() {
         if (complaints.isEmpty()) {

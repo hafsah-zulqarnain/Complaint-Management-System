@@ -127,6 +127,7 @@ public class Manager extends User implements Observer{
         
 
         // Store the assignment information in a file
+        
         LocalDate currentDate = LocalDate.now();
         FileManager.writeStateChangesToFile(j.getId(), "assigned", currentDate);
         //boolean sttus=j.getJobStatus();
@@ -140,39 +141,41 @@ public class Manager extends User implements Observer{
 
         // Store the assignment information in a file
         LocalDate currentDate = LocalDate.now();
-        FileManager.writeStateChangesToFile(id, "assigned", currentDate);
+        Complaint co=new Complaint();
+        co=FileManager.loadComplaintById(id);
+        co.setState(new Assigned());
+        FileManager.writeStateChangesToFile(id, co.s.getStateName(), currentDate);
         //boolean sttus=j.getJobStatus();
         System.out.println("");
         FileManager.updateAssignment(id);
-        FileManager.updateComplaintStateInFile(id, "assigned");
+        FileManager.updateComplaintStateInFile(id,co.s.getStateName());
         System.out.println("Complaint reassigned successfully.");
     }
 
     public void ResolveComplain(int cid) {
         LocalDate currentDate = LocalDate.now();
         System.out.println("");
-        FileManager.writeStateChangesToFile(cid, "resolved", currentDate);
-        FileManager.updateComplaintStateInFile(cid, "resolved");
+        Complaint co=new Complaint();
+        co=FileManager.loadComplaintById(cid);
+        co.setState(new Resolved());
+        FileManager.writeStateChangesToFile(cid, co.s.getStateName(), currentDate);
+        FileManager.updateComplaintStateInFile(cid, co.s.getStateName());
         String teacherUsername = FileManager.findTeacherForComplaint(cid);
         //System.out.println(teacherUsername);
         if (teacherUsername != null) {
             Teacher t = FileManager.findTeacherByUsername(teacherUsername);
             System.out.println(t.getSubject());
-            if (t != null) {
-                ArrayList<Complaint> complaints = new ArrayList<>();
-                FileManager.loadAllComplaintsFromFile(complaints);
-    
-                for (Complaint c : complaints) {
-                    if (c.getCid() == cid) {
-                        c.addObserver(t);
-                        c.markResolved(cid);
-                    }
+            ArrayList<Complaint> complaints = new ArrayList<>();
+            FileManager.loadAllComplaintsFromFile(complaints);
+   
+            for (Complaint c : complaints) {
+                if (c.getCid() == cid) {
+                    c.addObserver(t);
+                    c.markResolved(cid);
                 }
-    
-                System.out.println("Complaint resolved successfully.");
-            } else {
-                System.out.println("Teacher not found for the given complaint ID.");
             }
+   
+            System.out.println("Complaint resolved successfully.");
         } else {
             System.out.println("Teacher username not found for the given complaint ID.");
         }

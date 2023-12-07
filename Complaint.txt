@@ -1,2 +1,2 @@
-cid		State		type		Teacher		Dept		cdes
-1		assigned		problem		tania		admin		no		tea
+Cid		State		Type		Teacher		Dept		Description
+1		closed		problem		tania		admin		no		tea

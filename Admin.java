@@ -85,10 +85,12 @@ public class Admin extends User {
                 System.out.print("Department: ");
                 String deptName = scanner.nextLine();
                 m.setDepartment(deptName);
-                
+                File file = new File("Managers.txt");
+
+                if (file.exists()) {
                 ArrayList<Manager> allManagers=new ArrayList<>(FileManager.loadManagersFromFile("Managers.txt"));
                 boolean check=hasManager(allManagers,deptName);
-                if(check == false)
+                 if(check == false)
                 {
                      FileManager.writeManagerToFile(m, "Managers.txt");
                      FileManager.writeUserToFile(m, "Authen.txt");
@@ -98,7 +100,15 @@ public class Admin extends User {
                 else{
                     System.out.println("Department already has a manager");
                 }
-
+                }
+                else{
+              
+                     FileManager.writeManagerToFile(m, "Managers.txt");
+                     FileManager.writeUserToFile(m, "Authen.txt");
+                     AllUsers.add(m);
+                     System.out.println("User added successfully.");
+                }
+                
             }
 
             // Create a new User object

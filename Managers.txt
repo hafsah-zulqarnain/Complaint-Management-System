@@ -1,2 +1,2 @@
-Username	Name	Department
+Username		Name		Department
 hafsah		hafsah		admin

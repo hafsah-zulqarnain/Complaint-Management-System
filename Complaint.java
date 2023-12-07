@@ -110,6 +110,26 @@ public class Complaint implements Subject{
             return null;
         }
     }
+
+    public String getCdes() {
+        return cdes;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public Teacher getT() {
+        return t;
+    }
+
+    public Dept getD() {
+        return d;
+    }
+
+    public State getS() {
+        return s;
+    }
     public void print() {
         System.out.println("Complaint Id: " + cid);
         System.out.println("Complaint Description: " + cdes);

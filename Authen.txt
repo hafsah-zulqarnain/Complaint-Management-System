@@ -1,6 +1,6 @@
 Username	Password	Designation
 rijja		rijja		admin
-hafsah		hafsah		manager
 tania		tania		teacher
+maryam		maryam		teacher
 taha		taha		employee
-fatima		fatima		teacher
+hafsah		hafsah		manager

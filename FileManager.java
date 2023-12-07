@@ -71,15 +71,89 @@ public class FileManager {
                 e.printStackTrace();
             }
         }
-        public static void writeComplaintToFile(int id,String state ,String type, String teacher, String dept, String cdes) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Complaint.txt", true))) {
-            String complaintLine = String.format("%d\t\t%s\t\t%s\t\t%s\t\t%s\t\t%s", id, state ,type, teacher, dept, cdes);
-            writer.newLine();
-            writer.write(complaintLine);
-        } catch (IOException e) {
-            e.printStackTrace();
+        public static void writeComplaintToFile(Complaint c) {
+            String fileName = "Complaint.txt";
+            File file = new File(fileName);
+        
+            // Check if the file needs to be created
+            if (!file.exists()) {
+               // System.out.println("File does not exist. Creating a new file and writing header.");
+                try {
+                    file.createNewFile();
+        
+                    // Open the file and write the header
+                    try (PrintWriter headerWriter = new PrintWriter(new FileWriter(fileName))) {
+                        headerWriter.println("Cid\t\tState\t\tType\t\tTeacher\t\tDept\t\tDescription");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        
+            // Open the file in append mode
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+                // Add a new line before writing the data
+                String stateName = (c.s != null) ? c.s.getStateName() : "N/A";
+                String complaintLine = String.format("%d\t\t%s\t\t%s\t\t%s\t\t%s\t\t%s", c.getCid(), stateName, c.getType(), c.t.getUsername(), c.d.getName(), c.getCdes());
+                writer.write(complaintLine);
+                writer.newLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-    }
+        
+        public static Complaint loadComplaintById(int complaintId) {
+            String filePath = "Complaint.txt";
+    
+            try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+                reader.readLine(); // Skip the header line
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    try {
+                        String[] values = line.split("\t\t");
+                        int cid = Integer.parseInt(values[0].trim());
+    
+                        if (cid == complaintId) {
+                            String state = values[1].trim();
+                            String type = values[2].trim();
+                            String teacherUsername = values[3].trim();
+                            String deptName = values[4].trim();
+                            String description = values[5].trim();
+    
+                            // Create a proper Complaint object
+                            Complaint complaint = new Complaint();
+                            complaint.setComplaint(cid, description, type, teacherUsername, deptName);
+                            complaint.setState(getStateFromName(state));
+    
+                            return complaint;
+                        }
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace(); // Handle parsing errors
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace(); // Handle IO exception
+            }
+    
+            return null; // Return null if the complaint ID is not found
+        }
+    
+        // Helper method to get a State object based on the state name
+        private static State getStateFromName(String stateName) {
+            switch (stateName.toLowerCase()) {
+                case "new":
+                    return new New();
+                case "assigned":
+                    return new Assigned();
+                case "resolved":
+                    return new Resolved();
+                case "closed":
+                    return new Closed();
+                default:
+                    // Handle unrecognized states
+                    return null;
+            }
+        }
        
 public static int getRecentComplaintId() {
     try (BufferedReader reader = new BufferedReader(new FileReader("Complaint.txt"))) {
@@ -144,22 +218,34 @@ public static int getRecentComplaintId() {
         }
          public static void writeUserToFile(User user, String fileName) throws IOException {
             BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
-
         
+            writer.newLine();
             writer.write(user.getUsername() + "\t\t" + user.getPassword() + "\t\t" + user.getDesignation());
-             writer.newLine();
             writer.close();
         }
         
         public static void writeTeacherToFile(Teacher teacher, String fileName) throws IOException {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
-            writer.write(teacher.getUsername() + "\t\t" + teacher.getName() + "\t\t" + teacher.getSubject() + "\t\t" + teacher.getTdept());
-            writer.newLine();
-            writer.close();
+            // Check if the file exists
+            File file = new File(fileName);
+        
+            // Check if the file needs to be created
+            if (!file.exists()) {
+                System.out.println("File does not exist. Creating a new file and writing header.");
+                file.createNewFile();
+        
+                // Open the file and write the header
+                try (PrintWriter headerWriter = new PrintWriter(new FileWriter(fileName))) {
+                    headerWriter.println("Username\t\tName\t\tSubject\t\tDepartment");
+                }
+            }
+        
+            //Open the file in append mode
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+                // Add a new line before writing the data
+                writer.write(teacher.getUsername() + "\t\t" + teacher.getName() + "\t\t" + teacher.getSubject() + "\t\t" + teacher.getTdept());
+                writer.newLine();
+            }
         }
-      
-       
-
         // for removing
         public static ArrayList<User> loadUsersFromFile(String fileName) {
         ArrayList<User> users = new ArrayList<>();
@@ -320,10 +406,28 @@ public static void writeTeachersToFile(ArrayList<Teacher> teachers, String fileN
 
 // Writing Employees to file
  public static void writeEmployeeToFile(Employee emp, String fileName) throws IOException {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
-            writer.write(emp.getUsername() + "\t\t" + emp.getName() + "\t\t" +  emp.getDepartment());
-            writer.newLine();
-            writer.close();
+
+    
+             File file = new File(fileName);
+        
+            // Check if the file needs to be created
+            if (!file.exists()) {
+                System.out.println("File does not exist. Creating a new file and writing header.");
+                file.createNewFile();
+        
+                // Open the file and write the header
+                try (PrintWriter headerWriter = new PrintWriter(new FileWriter(fileName))) {
+                    headerWriter.println("Username\t\tName\t\tDepartment");
+                }
+            }
+        
+            //Open the file in append mode
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+                // Add a new line before writing the data
+                writer.write(emp.getUsername() + "\t\t" + emp.getName() + "\t\t" +  emp.getDepartment());
+                writer.newLine();
+                writer.close();
+            }
         }
 
     // Load all employees
@@ -421,10 +525,26 @@ public static void removeEmployeeFromFile(String usernameToRemove, String fileNa
     
 // Writing Manager to file
  public static void writeManagerToFile(Manager manager, String fileName) throws IOException {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
-            writer.write(manager.getUsername() + "\t\t" + manager.getName() + "\t\t" +  manager.getDepartment());
-            writer.newLine();
-            writer.close();
+          File file = new File(fileName);
+        
+            // Check if the file needs to be created
+            if (!file.exists()) {
+                System.out.println("File does not exist. Creating a new file and writing header.");
+                file.createNewFile();
+        
+                // Open the file and write the header
+                try (PrintWriter headerWriter = new PrintWriter(new FileWriter(fileName))) {
+                    headerWriter.println("Username\t\tName\t\tDepartment");
+                }
+            }
+        
+            //Open the file in append mode
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+                // Add a new line before writing the data
+                writer.write(manager.getUsername() + "\t\t" +manager.getName() + "\t\t" +  manager.getDepartment());
+                writer.newLine();
+                writer.close();
+            }
         }
 
 
@@ -642,34 +762,71 @@ public static ArrayList<Employee> loadManagerEmployeesFromFile(Dept department) 
     return managerEmployees;
 }
 public static void writeStateChangesToFile(int id, String state, LocalDate currentDate) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("StateChanges.txt", true))) {
-            String complaintLine = String.format("%d\t\t%s\t\t%s", id, state ,currentDate);
-            writer.newLine();
-            writer.write(complaintLine);
+    String fileName = "StateChanges.txt";
+    File file = new File(fileName);
+
+    // Check if the file needs to be created
+    if (!file.exists()) {
+        System.out.println("File does not exist. Creating a new file and writing header.");
+        try {
+            file.createNewFile();
+
+            // Open the file and write the header
+            try (PrintWriter headerWriter = new PrintWriter(new FileWriter(fileName))) {
+                headerWriter.println("Cid\t\tState\t\tDate");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-}
+    }
 
-public static void writeAssignmentsToFile(Job j) {
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter("Assignments.txt", true))) {
-        boolean jobStatus = j.getJobStatus();
-        //System.out.println(jobStatus);
+    // Open the file in append mode
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+        String complaintLine = String.format("%d\t\t%s\t\t%s", id, state, currentDate);
 
-        // Convert boolean to an appropriate representation (e.g., "Completed" or "Not Completed")
-        String statusString = jobStatus ? "true" : "false";
-       // System.out.println(statusString);
-        String complaintLine = String.format("%d\t\t%s\t\t%s\t\t%s", j.getId(), j.getEmployeename(), statusString,j.getSolution());
-        writer.newLine();  // Move the newLine after writing the line
+        // Add a new line before writing the data
         writer.write(complaintLine);
-
-        // Ensure that the writer is flushed to the file
-      //  writer.flush();
+        writer.newLine();
     } catch (IOException e) {
         e.printStackTrace();
     }
 }
+
+
+public static void writeAssignmentsToFile(Job j) {
+    String fileName = "Assignments.txt";
+    File file = new File(fileName);
+
+    // Check if the file needs to be created
+    if (!file.exists()) {
+        System.out.println("File does not exist. Creating a new file and writing header.");
+        try {
+            file.createNewFile();
+
+            // Open the file and write the header
+            try (PrintWriter headerWriter = new PrintWriter(new FileWriter(fileName))) {
+                headerWriter.println("Cid\t\tEmpName\t\tJobStatus\t\tSolution");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Open the file in append mode
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+        boolean jobStatus = j.getJobStatus();
+        // Convert boolean to an appropriate representation (e.g., "Completed" or "Not Completed")
+        String statusString = jobStatus ? "true" : "false";
+        String complaintLine = String.format("%d\t\t%s\t\t%s\t\t%s", j.getId(), j.getEmployeename(), statusString, j.getSolution());
+
+        // Add a new line before writing the data
+        writer.write(complaintLine);
+        writer.newLine();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
 
 public static void updateAssignment(int cid) {
     String filePath = "Assignments.txt";
@@ -741,20 +898,22 @@ public static void updateComplaintStateInFile(int complaintId, String newState) 
 
 public static ArrayList<Job> loadAssignmentsForEmployee(String employeeUsername) {
     ArrayList<Job> assignments = new ArrayList<>();
+
     try (BufferedReader reader = new BufferedReader(new FileReader("Assignments.txt"))) {
         reader.readLine(); // Read and store the header line
         String line;
+
         while ((line = reader.readLine()) != null) {
             try (Scanner scanner = new Scanner(line)) {
-                //System.out.println(line);
-                //scanner.nextLine(); // Skip the first line
                 String[] values = line.split("\t\t");
                 int cid = Integer.parseInt(values[0]);
                 String empname = values[1];
                 String status = values[2];
+                String solution =values[3];
 
                 if (empname.equals(employeeUsername)) {
                     Job assignment = new Job(cid, empname);
+
                     if (status.equals("true")) {
                         assignment.setCompleted(true);
                     } else if (status.equals("false")) {
@@ -762,6 +921,7 @@ public static ArrayList<Job> loadAssignmentsForEmployee(String employeeUsername)
                     } else {
                         // Handle unrecognized status (optional)
                     }
+                    assignment.setSolution(solution);
                     assignments.add(assignment);
                 }
             }
@@ -834,14 +994,36 @@ public static void loadManagerDeptFromFile(Manager manager,String d) {
     }
 }
 public static void saveNotificationToFile(Notification notification, String username) {
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter("notifications.txt", true))) {
-        String notificationLine = String.format("%s\t\t%s\t\t%s", username ,notification.getTimestamp(), notification.getMessage());
+    String fileName = "notifications.txt";
+    File file = new File(fileName);
+
+    // Check if the file needs to be created
+    if (!file.exists()) {
+        System.out.println("File does not exist. Creating a new file and writing header.");
+        try {
+            file.createNewFile();
+
+            // Open the file and write the header
+            try (PrintWriter headerWriter = new PrintWriter(new FileWriter(fileName))) {
+                headerWriter.println("Username\t\tTimestamp\t\tMessage");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Open the file in append mode
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+        String notificationLine = String.format("%s\t\t%s\t\t%s", username, notification.getTimestamp(), notification.getMessage());
+
+        // Add a new line before writing the data
         writer.newLine();
         writer.write(notificationLine);
     } catch (IOException e) {
         e.printStackTrace();
     }
 }
+
 
 
 public static List<Notification> loadNotificationsFromFile(String filePath, User m) {
@@ -866,7 +1048,7 @@ public static List<Notification> loadNotificationsFromFile(String filePath, User
                     }
                 } else {
                     // Log or handle the case where the line doesn't have enough elements
-                    System.out.println("Skipping invalid line: " + line);
+                   // System.out.println("Skipping invalid line: " + line);
                 }
             } catch (ParseException e) {
                 e.printStackTrace(); // Handle date parsing exception
