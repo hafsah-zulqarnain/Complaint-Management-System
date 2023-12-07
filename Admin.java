@@ -62,8 +62,15 @@ public class Admin extends User {
                 e.setName(name);
                 System.out.print("Employee Department: ");
                 String deptName = scanner.nextLine();
-                e.setDepartment(deptName);
                 
+                if(!(deptName.equals("it") || deptName.equals("admin") || deptName.equals("accounts")))
+                {
+                    while (!(deptName.equals("it") || deptName.equals("admin") || deptName.equals("accounts"))) {
+                        System.out.print("No such department exists .Enter Employee Department again: ");
+                        deptName = scanner.nextLine();
+                    }
+                }
+                e.setDepartment(deptName);
                 FileManager.writeEmployeeToFile(e, "Employees.txt");
                 AllUsers.add(e);
                 FileManager.writeUserToFile(e, "Authen.txt");
@@ -84,6 +91,14 @@ public class Admin extends User {
                 m.setName(name);
                 System.out.print("Department: ");
                 String deptName = scanner.nextLine();
+                
+                if(!(deptName.equals("it") || deptName.equals("admin") || deptName.equals("accounts")))
+                {
+                    while (deptName.equals("it") || deptName.equals("admin") || deptName.equals("accounts")) {
+                        System.out.print("No such department exists .Enter Employee Department again: ");
+                        deptName = scanner.nextLine();
+                    }
+                }
                 m.setDepartment(deptName);
                 File file = new File("Managers.txt");
 

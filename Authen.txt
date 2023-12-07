@@ -3,3 +3,8 @@ rijja		rijja		admin
 hafsah		hafsah		manager
 tania		tania		teacher
 taha		taha		employee
+talha		talha		teacher
+h		h		manager
+sj		jdc		employee
+user		user		employee
+ha		ha		employee
