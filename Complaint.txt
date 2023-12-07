@@ -1,4 +1,4 @@
 Cid		State		Type		Teacher		Dept		Description
 1		closed		problem		tania		admin		no		chairs
-2       open        problem     tania       cs          abc
+2       new         problem     tania       cs          abc
 3       closed      problem     tania       cs          abc
