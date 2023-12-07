@@ -63,7 +63,7 @@ public class CampusDirector extends User {
         Map<String, String> managersMap = getManager("Managers.txt");
         Map<Integer, String> stateChangesMap = findStateAndDate("StateChanges.txt");
         String[] complaintDetails = getComplainDetails("Complaint.txt", complaintId);
-        String[] assignmentDetails = getAssignedEmployee("Assignments.txt", complaintId);
+        String assignmentDetails = getAssignedEmployee("Assignments.txt", complaintId);
 
         if (complaintDetails != null) {
             String department = complaintDetails[0];
@@ -85,7 +85,7 @@ public class CampusDirector extends User {
                 System.out.println("Date of Job Assignment: " + stateChange);
             }
             if (assignmentDetails != null) {
-                String employeeName = assignmentDetails[0];
+                String employeeName = assignmentDetails;
                 System.out.println("Assigned Employee: " + employeeName);
             }
         } else {
@@ -93,7 +93,7 @@ public class CampusDirector extends User {
         }
     }
 
-    private static String[] getAssignedEmployee(String fileName, int complaintId) {
+    private static String getAssignedEmployee(String fileName, int complaintId) {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             reader.readLine(); // Discard the header line
 
@@ -105,7 +105,7 @@ public class CampusDirector extends User {
                     if (cid == complaintId) {
                         String employeeName = data[1];
 
-                        return new String[] { employeeName };
+                        return new String(employeeName);
                     }
                 } else {
                     System.out.println("Invalid data format in line: " + line);
@@ -177,7 +177,7 @@ public class CampusDirector extends User {
                     if (cid == complaintId) {
                         String department = data[4];
                         String teacher = data[3];
-                        String description = data[5].trim();
+                        String description = data[5];
 
                         return new String[] { department, teacher, description };
                     }
