@@ -47,7 +47,7 @@ public class CampusDirector extends User {
 
             Map<String, Integer> statusCount = departmentEntry.getValue();
             System.out.println("Total no of closed complaints: " + statusCount.getOrDefault("closed", 0));
-            System.out.println("Total no of open complaints: " + statusCount.getOrDefault("open", 0));
+            System.out.println("Total no of new complaints: " + statusCount.getOrDefault("new", 0));
             System.out.println("Total no of assigned complaints: " + statusCount.getOrDefault("assigned", 0));
             System.out.println("Total no of resolved complaints: " + statusCount.getOrDefault("resolved", 0));
 
