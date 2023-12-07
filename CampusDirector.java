@@ -6,6 +6,7 @@ import java.util.Map;
 
 public class CampusDirector extends User {
 
+    // ------------------------Overall Summary---------------------
     public static void viewComplaintSummary() {
         Map<String, Map<String, Integer>> departmentStatusCount = new HashMap<>();
         Map<String, Integer> departmentTotalCount = new HashMap<>();
@@ -55,7 +56,150 @@ public class CampusDirector extends User {
         }
     }
 
+    // ------------------------complain wise detail---------------------
+
+    public static void viewComplaintDetails(int complaintId) {
+
+        Map<String, String> managersMap = getManager("Managers.txt");
+        Map<Integer, String> stateChangesMap = findStateAndDate("StateChanges.txt");
+        String[] complaintDetails = readComplaintDetailsFromFile("Complaint.txt", complaintId);
+        String[] assignmentDetails = readAssignmentDetailsFromFile("Assignments.txt", complaintId);
+
+        if (complaintDetails != null) {
+            String department = complaintDetails[0];
+            String teacher = complaintDetails[1];
+            String description = complaintDetails[2];
+
+            System.out.println("Complaint ID: " + complaintId);
+            System.out.println("Department: " + department);
+            System.out.println("Teacher: " + teacher);
+            System.out.println("Description: " + description);
+
+            String manager = managersMap.get(department);
+            if (manager != null) {
+                System.out.println("Manager: " + manager);
+            }
+
+            String stateChange = stateChangesMap.get(complaintId);
+            if (stateChange != null) {
+                System.out.println("Date of Job Assignment: " + stateChange);
+            }
+            if (assignmentDetails != null) {
+                String employeeName = assignmentDetails[0];
+                String jobStatus = assignmentDetails[1];
+                String solution = assignmentDetails[2];
+
+                System.out.println("Assigned Employee: " + employeeName);
+                System.out.println("Job Status: " + jobStatus);
+                System.out.println("Solution: " + solution);
+            }
+        } else {
+            System.out.println("Complaint with ID " + complaintId + " not found.");
+        }
+    }
+
+    private static String[] readAssignmentDetailsFromFile(String fileName, int complaintId) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            reader.readLine(); // Discard the header line
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split("\\s+");
+                if (data.length > 3) {
+                    int cid = Integer.parseInt(data[0]);
+                    if (cid == complaintId) {
+                        String employeeName = data[1];
+                        String jobStatus = data[2];
+                        String solution = data[3];
+
+                        return new String[] { employeeName, jobStatus, solution };
+                    }
+                } else {
+                    System.out.println("Invalid data format in line: " + line);
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static Map<String, String> getManager(String fileName) {
+        Map<String, String> managersMap = new HashMap<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            reader.readLine(); // Discard the header line
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split("\\s+");
+                if (data.length > 2) {
+                    String username = data[0];
+                    String name = data[1];
+                    String department = data[2];
+
+                    managersMap.put(department, name);
+                } else {
+                    System.out.println("Invalid data format in line: " + line);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return managersMap;
+    }
+
+    private static Map<Integer, String> findStateAndDate(String fileName) {
+        Map<Integer, String> stateChangesMap = new HashMap<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            reader.readLine(); // Discard the header line
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split("\\s+");
+                if (data.length > 2) {
+                    int cid = Integer.parseInt(data[0]);
+                    String state = data[1];
+                    String date = data[2];
+
+                    stateChangesMap.put(cid, date);
+                } else {
+                    System.out.println("Invalid data format in line: " + line);
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return stateChangesMap;
+    }
+
+    private static String[] readComplaintDetailsFromFile(String fileName, int complaintId) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            reader.readLine(); // Discard the header line
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split("\\s+", 7); // Split into at most 7 parts
+                if (data.length > 5) {
+                    int cid = Integer.parseInt(data[0]);
+                    if (cid == complaintId) {
+                        String department = data[4];
+                        String teacher = data[3];
+                        String description = data[6]; // Use index 6 for the description
+
+                        return new String[] { department, teacher, description };
+                    }
+                } else {
+                    System.out.println("Invalid data format in line: " + line);
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         viewComplaintSummary();
+        viewComplaintDetails(1);
     }
 }
