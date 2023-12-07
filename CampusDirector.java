@@ -86,12 +86,7 @@ public class CampusDirector extends User {
             }
             if (assignmentDetails != null) {
                 String employeeName = assignmentDetails[0];
-                String jobStatus = assignmentDetails[1];
-                String solution = assignmentDetails[2];
-
                 System.out.println("Assigned Employee: " + employeeName);
-                System.out.println("Job Status: " + jobStatus);
-                System.out.println("Solution: " + solution);
             }
         } else {
             System.out.println("Complaint with ID " + complaintId + " not found.");
@@ -109,10 +104,8 @@ public class CampusDirector extends User {
                     int cid = Integer.parseInt(data[0]);
                     if (cid == complaintId) {
                         String employeeName = data[1];
-                        String jobStatus = data[2];
-                        String solution = data[3];
 
-                        return new String[] { employeeName, jobStatus, solution };
+                        return new String[] { employeeName };
                     }
                 } else {
                     System.out.println("Invalid data format in line: " + line);
@@ -178,13 +171,13 @@ public class CampusDirector extends User {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] data = line.split("\\s+", 7); // Split into at most 7 parts
+                String[] data = line.split("\\s+");
                 if (data.length > 5) {
                     int cid = Integer.parseInt(data[0]);
                     if (cid == complaintId) {
                         String department = data[4];
                         String teacher = data[3];
-                        String description = data[6]; // Use index 6 for the description
+                        String description = data[5].trim();
 
                         return new String[] { department, teacher, description };
                     }
